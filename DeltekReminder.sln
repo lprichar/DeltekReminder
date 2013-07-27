@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltekReminder.DesktopApp", "DeltekReminder.DesktopApp\DeltekReminder.DesktopApp.csproj", "{169F8F6B-6110-4600-AFB7-A66731EE01A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltekReminder.Lib", "DeltekReminder.Lib\DeltekReminder.Lib.csproj", "{2F8CA6C3-8ABF-4E3D-824D-59E46E2A7FA4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{169F8F6B-6110-4600-AFB7-A66731EE01A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{169F8F6B-6110-4600-AFB7-A66731EE01A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{169F8F6B-6110-4600-AFB7-A66731EE01A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{169F8F6B-6110-4600-AFB7-A66731EE01A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F8CA6C3-8ABF-4E3D-824D-59E46E2A7FA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8CA6C3-8ABF-4E3D-824D-59E46E2A7FA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8CA6C3-8ABF-4E3D-824D-59E46E2A7FA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8CA6C3-8ABF-4E3D-824D-59E46E2A7FA4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
