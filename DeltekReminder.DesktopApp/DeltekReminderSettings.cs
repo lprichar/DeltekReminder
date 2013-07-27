@@ -17,7 +17,7 @@ namespace DeltekReminder.DesktopApp
 
         public string Domain { get; set; }
         
-        public string Url { get; set; }
+        public string BaseUrl { get; set; }
 
         private static string GetConfigFileName()
         {

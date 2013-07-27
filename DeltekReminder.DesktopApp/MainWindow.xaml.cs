@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using DeltekReminder.Lib;
 using mshtml;
 
 namespace DeltekReminder.DesktopApp
@@ -9,7 +10,7 @@ namespace DeltekReminder.DesktopApp
     /// </summary>
     public partial class MainWindow
     {
-        private DeltekReminderSettings _settings;
+        private readonly DeltekReminderSettings _settings;
         
         public MainWindow()
         {
@@ -17,7 +18,8 @@ namespace DeltekReminder.DesktopApp
 
             _settings = DeltekReminderSettings.GetSettings();
 
-            if (!string.IsNullOrEmpty(_settings.Url))
+            var credentialsExist = !string.IsNullOrEmpty(_settings.BaseUrl);
+            if (credentialsExist)
             {
                 PopulateControlValuesFromSettings();
                 Login();
@@ -29,7 +31,7 @@ namespace DeltekReminder.DesktopApp
             Username.Text = _settings.Username;
             Password.Password = _settings.Password;
             Domain.Text = _settings.Domain;
-            Url.Text = _settings.Url;
+            Url.Text = _settings.BaseUrl;
         }
 
         private void OnConnect_Click(object sender, RoutedEventArgs e)
@@ -43,24 +45,38 @@ namespace DeltekReminder.DesktopApp
             _settings.Username = Username.Text;
             _settings.Password = Password.Password;
             _settings.Domain = Domain.Text;
-            _settings.Url = Url.Text;
+            var uri = UrlUtils.GetBase(Url.Text);
+            _settings.BaseUrl = uri;
             _settings.Save();
         }
 
         private void Login()
         {
-            var source = new Uri(_settings.Url);
-            Browser.Navigate(source);
+            var loginPageUri = new Uri(_settings.BaseUrl + "/DeltekTC/welcome.msv");
+
+            Browser.Navigate(loginPageUri);
+            int numberOfTimesLoginPage = 0;
             Browser.LoadCompleted += (o, args) =>
                 {
-                    if (args.Uri == source)
+                    var onLoginPage = args.Uri == loginPageUri;
+                    var loginFailed = numberOfTimesLoginPage > 0;
+                    if (onLoginPage && !loginFailed)
                     {
-                        var document = (HTMLDocument)Browser.Document;
-                        SetValueById(document, "uid", _settings.Username);
-                        SetValueById(document, "passField", _settings.Password);
-                        SetValueById(document, "dom", _settings.Domain);
+                        numberOfTimesLoginPage++;
+                        EnterCredentialsAndSubmit();
                     }
                 };
+        }
+
+        private void EnterCredentialsAndSubmit()
+        {
+            var document = (HTMLDocument) Browser.Document;
+            SetValueById(document, "uid", _settings.Username);
+            SetValueById(document, "passField", _settings.Password);
+            SetValueById(document, "dom", _settings.Domain);
+
+            IHTMLElement loginButton = document.getElementById("loginButton");
+            loginButton.click();
         }
 
         private void SetValueById(HTMLDocument document, string id, string value)
