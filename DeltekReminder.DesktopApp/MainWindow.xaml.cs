@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using DeltekReminder.Lib;
 using mshtml;
@@ -52,18 +53,44 @@ namespace DeltekReminder.DesktopApp
 
         private void Login()
         {
-            var loginPageUri = new Uri(_settings.BaseUrl + "/DeltekTC/welcome.msv");
+            var loginPageUri = UrlUtils.GetLoginPage(_settings.BaseUrl);
 
             Browser.Navigate(loginPageUri);
-            int numberOfTimesLoginPage = 0;
+            int attemptedLogins = 0;
             Browser.LoadCompleted += (o, args) =>
                 {
                     var onLoginPage = args.Uri == loginPageUri;
-                    var loginFailed = numberOfTimesLoginPage > 0;
+                    var onDesktopPage = UrlUtils.OnDesktopPage(args.Uri);
+                    var loginFailed = attemptedLogins > 0;
                     if (onLoginPage && !loginFailed)
                     {
-                        numberOfTimesLoginPage++;
+                        attemptedLogins++;
                         EnterCredentialsAndSubmit();
+                    }
+                    if (onDesktopPage)
+                    {
+                        var document = (HTMLDocument)Browser.Document;
+                        var unitFrame = document.frames.item("unitFrame");
+                        if (unitFrame == null)
+                        {
+                            throw new Exception("Unable to find unitFrame iframe");
+                        }
+                        HTMLDocument unitFrameDocument = (HTMLDocument)unitFrame.document;
+                        var openTimesheet = unitFrameDocument.getElementsByTagName("tr")
+                            .Cast<IHTMLElement>()
+                            .Where(i => i.className == "notSelected")
+                            .FirstOrDefault(i => i.innerText.Contains("Open"));
+
+                        if (openTimesheet == null)
+                        {
+                            MessageBox.Show("No active timesheet");
+                            return;
+                        }
+                        var allChildren = (IHTMLElementCollection)openTimesheet.all;
+                        IHTMLElement spanToClick = allChildren
+                            .Cast<IHTMLElement>()
+                            .First(i => i.tagName.Equals("span", StringComparison.InvariantCultureIgnoreCase) && "desktopNormalAlertText".Equals(i.className, StringComparison.InvariantCultureIgnoreCase));
+                        spanToClick.click();
                     }
                 };
         }
