@@ -11,7 +11,7 @@ namespace DeltekReminder.Lib
             return uri.Scheme + "://" + uri.Host;
         }
 
-        public static bool OnDesktopPage(Uri uri)
+        public static bool OnTimeCollectionPage(Uri uri)
         {
             return uri.AbsolutePath == "/DeltekTC/TimeCollection.msv";
         }

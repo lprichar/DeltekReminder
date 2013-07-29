@@ -17,19 +17,19 @@ namespace DeltekReminder.Test
         [Test]
         public void OnDesktopPage_YesWithParams()
         {
-            Assert.IsTrue(UrlUtils.OnDesktopPage(new Uri("https://te01.neosystems.net/DeltekTC/TimeCollection.msv?p=1")));
+            Assert.IsTrue(UrlUtils.OnTimeCollectionPage(new Uri("https://te01.neosystems.net/DeltekTC/TimeCollection.msv?p=1")));
         }
 
         [Test]
         public void OnDesktopPage_YesWithoutParams()
         {
-            Assert.IsTrue(UrlUtils.OnDesktopPage(new Uri("https://te01.neosystems.net/DeltekTC/TimeCollection.msv")));
+            Assert.IsTrue(UrlUtils.OnTimeCollectionPage(new Uri("https://te01.neosystems.net/DeltekTC/TimeCollection.msv")));
         }
 
         [Test]
         public void OnDesktopPage_LoginPage_No()
         {
-            Assert.IsFalse(UrlUtils.OnDesktopPage(new Uri("https://te01.neosystems.net/DeltekTC/welcome.msv")));
+            Assert.IsFalse(UrlUtils.OnTimeCollectionPage(new Uri("https://te01.neosystems.net/DeltekTC/welcome.msv")));
         }
 
         [Test]

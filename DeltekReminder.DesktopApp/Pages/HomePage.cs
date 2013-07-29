@@ -9,20 +9,14 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public class HomePage : DeltekPageBase
     {
-        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri)
+        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri, bool triggeredByIframeRefresh)
         {
-            return UrlUtils.OnDesktopPage(uri);
+            return UrlUtils.OnTimeCollectionPage(uri) && !triggeredByIframeRefresh;
         }
 
         public override void DoStuff(DeltekReminderSettings settings, WebBrowser browser)
         {
-            var document = (HTMLDocument)browser.Document;
-            var unitFrame = document.frames.item("unitFrame");
-            if (unitFrame == null)
-            {
-                throw new Exception("Unable to find unitFrame iframe");
-            }
-            HTMLDocument unitFrameDocument = (HTMLDocument)unitFrame.document;
+            HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var openTimesheet = unitFrameDocument.getElementsByTagName("tr")
                 .Cast<IHTMLElement>()
                 .Where(i => i.className == "notSelected")
@@ -37,6 +31,7 @@ namespace DeltekReminder.DesktopApp.Pages
             IHTMLElement spanToClick = allChildren
                 .Cast<IHTMLElement>()
                 .First(i => i.tagName.Equals("span", StringComparison.InvariantCultureIgnoreCase) && "desktopNormalAlertText".Equals(i.className, StringComparison.InvariantCultureIgnoreCase));
+
             spanToClick.click();
         }
     }

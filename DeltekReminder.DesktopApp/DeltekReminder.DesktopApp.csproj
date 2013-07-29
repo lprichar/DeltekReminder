@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DhtmlEventHandler.cs" />
     <Compile Include="Pages\DeltekPageBase.cs" />
     <Compile Include="DeltekReminderSettings.cs" />
     <Page Include="MainWindow.xaml">
@@ -84,6 +85,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\TimesheetPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

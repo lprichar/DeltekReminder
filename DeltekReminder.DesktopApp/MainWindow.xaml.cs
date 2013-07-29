@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Navigation;
 using DeltekReminder.DesktopApp.Pages;
 using DeltekReminder.Lib;
 using mshtml;
@@ -8,7 +9,7 @@ using mshtml;
 namespace DeltekReminder.DesktopApp
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// This works for Deltek v9.0.1.0 build 9.0.1.144
     /// </summary>
     public partial class MainWindow
     {
@@ -52,26 +53,54 @@ namespace DeltekReminder.DesktopApp
             _settings.Save();
         }
 
+        private DeltekPageBase[] pages;
+
         private void Login()
         {
             var loginPageUri = UrlUtils.GetLoginPage(_settings.BaseUrl);
 
             Browser.Navigate(loginPageUri);
-            var pages = new DeltekPageBase[]
+            pages = new DeltekPageBase[]
                         {
                             new LoginPage(),
                             new HomePage(),
+                            new TimesheetPage(),
                         };
-            
-            Browser.LoadCompleted += (o, args) =>
-                {
-                    var currentPage = pages.FirstOrDefault(i => i.OnThisPage(_settings, args.Uri));
-                    if (currentPage != null)
-                    {
-                        currentPage.DoStuff(_settings, Browser);
-                    }
-                };
+
+            Browser.LoadCompleted += Browser_LoadCompleted;
         }
 
+        private void Browser_LoadCompleted(object sender, NavigationEventArgs args)
+        {
+            OnNavigatedToNewPage(triggeredByIframeRefresh: false);
+        }
+
+        private void OnNavigatedToNewPage(bool triggeredByIframeRefresh)
+        {
+            var document = (HTMLDocument)Browser.Document;
+            var uri = new Uri(document.url);
+            var currentPage = pages.FirstOrDefault(i => i.OnThisPage(_settings, uri, triggeredByIframeRefresh));
+            if (currentPage != null)
+            {
+                if (currentPage is HomePage)
+                {
+                    SubscribeToOnActivate(document);
+                }
+                currentPage.DoStuff(_settings, Browser);
+            }
+        }
+
+        private void SubscribeToOnActivate(HTMLDocument document)
+        {
+            var htmlDocument = document;
+            DhtmlEventHandler myHandler = new DhtmlEventHandler(htmlDocument);
+            myHandler.Handler += DocumentOnActivate;
+            ((DispHTMLDocument) document).onactivate = myHandler;
+        }
+
+        public void DocumentOnActivate(IHTMLEventObj evo)
+        {
+            OnNavigatedToNewPage(triggeredByIframeRefresh: true);
+        }
     }
 }

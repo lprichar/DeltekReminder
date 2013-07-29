@@ -9,7 +9,7 @@ namespace DeltekReminder.DesktopApp.Pages
     {
         int _attemptedLogins = 0;
 
-        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri)
+        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri, bool triggeredByIframeRefresh)
         {
             return uri == UrlUtils.GetLoginPage(settings.BaseUrl);
         }

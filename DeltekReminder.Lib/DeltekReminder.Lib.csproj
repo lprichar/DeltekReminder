@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeltekInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Timesheet.cs" />
+    <Compile Include="TimesheetEntry.cs" />
+    <Compile Include="TimesheetProject.cs" />
     <Compile Include="UrlUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
