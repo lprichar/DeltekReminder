@@ -53,18 +53,18 @@ namespace DeltekReminder.DesktopApp
             _settings.Save();
         }
 
-        private DeltekPageBase[] pages;
+        private DeltekPageBase[] _pages;
 
         private void Login()
         {
             var loginPageUri = UrlUtils.GetLoginPage(_settings.BaseUrl);
 
             Browser.Navigate(loginPageUri);
-            pages = new DeltekPageBase[]
+            _pages = new DeltekPageBase[]
                         {
                             new LoginPage(),
                             new HomePage(),
-                            new TimesheetPage(),
+                            new TimesheetPage()
                         };
 
             Browser.LoadCompleted += Browser_LoadCompleted;
@@ -79,7 +79,7 @@ namespace DeltekReminder.DesktopApp
         {
             var document = (HTMLDocument)Browser.Document;
             var uri = new Uri(document.url);
-            var currentPage = pages.FirstOrDefault(i => i.OnThisPage(_settings, uri, triggeredByIframeRefresh));
+            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_settings, uri, triggeredByIframeRefresh));
             if (currentPage != null)
             {
                 if (currentPage is HomePage)
