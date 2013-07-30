@@ -68,7 +68,6 @@
     </ApplicationDefinition>
     <Compile Include="DhtmlEventHandler.cs" />
     <Compile Include="Pages\DeltekPageBase.cs" />
-    <Compile Include="DeltekReminderSettings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

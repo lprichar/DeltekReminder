@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using DeltekReminder.Lib;
 using DeltekReminder.Lib.Utils;
@@ -10,7 +9,15 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public class TimesheetPage : DeltekPageBase
     {
-        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri, bool triggeredByIframeRefresh)
+        public event IsMissingTimeForToday IsMissingTimeForToday;
+
+        protected virtual void InvokeIsMissingTimeForToday(Timesheet timesheet)
+        {
+            var handler = IsMissingTimeForToday;
+            if (handler != null) handler(this, new IsMissingTimeForTodayArgs { Timesheet = timesheet });
+        }
+
+        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
         {
             return UrlUtils.OnTimeCollectionPage(uri) && triggeredByIframeRefresh;
         }
@@ -32,16 +39,26 @@ namespace DeltekReminder.DesktopApp.Pages
             return double.Parse(text);
         }
 
-        public override void DoStuff(DeltekReminderSettings settings, WebBrowser browser)
+        public override void DoStuff(DeltekReminderContext ctx, WebBrowser browser)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
+            var timesheet = GetTimesheetFromDocument(unitFrameDocument);
+            if (timesheet.IsMissingTimeForToday(ctx))
+            {
+                InvokeIsMissingTimeForToday(timesheet);
+            }
+        }
 
+        private Timesheet GetTimesheetFromDocument(HTMLDocument unitFrameDocument)
+        {
             Timesheet timesheet = new Timesheet();
 
             PopulateTimesheetAttributes(unitFrameDocument, timesheet);
             PopulateDays(unitFrameDocument, timesheet);
             PopulateProjects(unitFrameDocument, timesheet);
             PopulateEntries(unitFrameDocument, timesheet);
+
+            return timesheet;
         }
 
         private void PopulateDays(HTMLDocument document, Timesheet timesheet)
@@ -79,7 +96,6 @@ namespace DeltekReminder.DesktopApp.Pages
                 foreach (var day in timesheet.Days)
                 {
                     var hours = GetHoursAtCell(unitFrameDocument, project.Row, day.Column);
-                    MessageBox.Show(string.Format("Row {0}; Col: {1}; Val: {2}", project.Row, day.Column, hours));
                     if (hours == null) continue;
                     var timesheetEntry = new TimesheetEntry
                     {
@@ -114,5 +130,12 @@ namespace DeltekReminder.DesktopApp.Pages
                 row++;
             }
         }
+    }
+
+    public delegate void IsMissingTimeForToday(object sender, IsMissingTimeForTodayArgs args);
+
+    public class IsMissingTimeForTodayArgs
+    {
+        public Timesheet Timesheet { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Navigation;
 using DeltekReminder.DesktopApp.Pages;
@@ -13,15 +14,24 @@ namespace DeltekReminder.DesktopApp
     /// </summary>
     public partial class MainWindow
     {
-        private readonly DeltekReminderSettings _settings;
-        
+        private DeltekReminderContext _ctx;
+
         public MainWindow()
         {
             InitializeComponent();
-
-            _settings = DeltekReminderSettings.GetSettings();
-
-            var credentialsExist = !string.IsNullOrEmpty(_settings.BaseUrl);
+            try
+            {
+                _ctx = new DeltekReminderContext();
+            }
+            catch (SerializationException ex)
+            {
+                var dialogResult = MessageBox.Show("There was an error deserializing the settings file.  Click OK to revert the file and start over or cancel to close the app and fix the problem yourself.  Here's the error: " + ex, "Drat!", MessageBoxButton.OKCancel);
+                if (dialogResult == MessageBoxResult.Cancel)
+                {
+                    Application.Current.Shutdown();
+                }
+            }
+            var credentialsExist = !string.IsNullOrEmpty(_ctx.Settings.BaseUrl);
             if (credentialsExist)
             {
                 PopulateControlValuesFromSettings();
@@ -31,10 +41,10 @@ namespace DeltekReminder.DesktopApp
 
         private void PopulateControlValuesFromSettings()
         {
-            Username.Text = _settings.Username;
-            Password.Password = _settings.Password;
-            Domain.Text = _settings.Domain;
-            Url.Text = _settings.BaseUrl;
+            Username.Text = _ctx.Settings.Username;
+            Password.Password = _ctx.Settings.Password;
+            Domain.Text = _ctx.Settings.Domain;
+            Url.Text = _ctx.Settings.BaseUrl;
         }
 
         private void OnConnect_Click(object sender, RoutedEventArgs e)
@@ -45,29 +55,35 @@ namespace DeltekReminder.DesktopApp
 
         private void SaveControlValuesIntoSettings()
         {
-            _settings.Username = Username.Text;
-            _settings.Password = Password.Password;
-            _settings.Domain = Domain.Text;
+            _ctx.Settings.Username = Username.Text;
+            _ctx.Settings.Password = Password.Password;
+            _ctx.Settings.Domain = Domain.Text;
             var uri = UrlUtils.GetBase(Url.Text);
-            _settings.BaseUrl = uri;
-            _settings.Save();
+            _ctx.Settings.BaseUrl = uri;
+            _ctx.Settings.Save();
         }
 
         private DeltekPageBase[] _pages;
 
         private void Login()
         {
-            var loginPageUri = UrlUtils.GetLoginPage(_settings.BaseUrl);
+            var loginPageUri = UrlUtils.GetLoginPage(_ctx.Settings.BaseUrl);
 
+            Browser.LoadCompleted += Browser_LoadCompleted;
             Browser.Navigate(loginPageUri);
+            var timesheetPage = new TimesheetPage();
+            timesheetPage.IsMissingTimeForToday += TimesheetPage_IsMissingTimeForToday;
             _pages = new DeltekPageBase[]
                         {
                             new LoginPage(),
                             new HomePage(),
-                            new TimesheetPage()
+                            timesheetPage
                         };
+        }
 
-            Browser.LoadCompleted += Browser_LoadCompleted;
+        private void TimesheetPage_IsMissingTimeForToday(object sender, IsMissingTimeForTodayArgs args)
+        {
+            MessageBox.Show("Missing timesheet for today!");
         }
 
         private void Browser_LoadCompleted(object sender, NavigationEventArgs args)
@@ -79,14 +95,14 @@ namespace DeltekReminder.DesktopApp
         {
             var document = (HTMLDocument)Browser.Document;
             var uri = new Uri(document.url);
-            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_settings, uri, triggeredByIframeRefresh));
+            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, triggeredByIframeRefresh));
             if (currentPage != null)
             {
                 if (currentPage is HomePage)
                 {
                     SubscribeToOnActivate(document);
                 }
-                currentPage.DoStuff(_settings, Browser);
+                currentPage.DoStuff(_ctx, Browser);
             }
         }
 

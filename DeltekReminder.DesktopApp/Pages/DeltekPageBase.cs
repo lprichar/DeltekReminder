@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Windows.Controls;
+using DeltekReminder.Lib;
 using mshtml;
 
 namespace DeltekReminder.DesktopApp.Pages
 {
     public abstract class DeltekPageBase
     {
-        public abstract bool OnThisPage(DeltekReminderSettings settings, Uri uri, bool triggeredByIframeRefresh);
+        public abstract bool OnThisPage(DeltekReminderContext settings, Uri uri, bool triggeredByIframeRefresh);
 
-        public abstract void DoStuff(DeltekReminderSettings settings, WebBrowser browser);
+        public abstract void DoStuff(DeltekReminderContext settings, WebBrowser browser);
 
         public static IHTMLWindow2 GetUnitFrameGlobal(WebBrowser browser)
         {

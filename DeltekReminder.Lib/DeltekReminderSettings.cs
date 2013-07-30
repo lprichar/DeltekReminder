@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Windows;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace DeltekReminder.DesktopApp
+namespace DeltekReminder.Lib
 {
     [Serializable]
     public class DeltekReminderSettings
@@ -42,23 +42,18 @@ namespace DeltekReminder.DesktopApp
             FileStream myFileStream = null;
             try
             {
-                XmlSerializer mySerializer = new XmlSerializer(typeof(DeltekReminderSettings));
+                XmlSerializer mySerializer = new XmlSerializer(typeof (DeltekReminderSettings));
                 FileInfo fi = new FileInfo(fileName);
                 if (fi.Exists)
                 {
                     myFileStream = fi.OpenRead();
-                    DeltekReminderSettings settings = (DeltekReminderSettings)mySerializer.Deserialize(myFileStream);
+                    DeltekReminderSettings settings = (DeltekReminderSettings) mySerializer.Deserialize(myFileStream);
                     return settings;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var dialogResult = MessageBox.Show("There was an error deserializing the settings file.  Click OK to revert the file and start over or cancel to close the app and fix the problem yourself.  Here's the error: " + ex, "Drat!", MessageBoxButton.OKCancel);
-                if (dialogResult == MessageBoxResult.Cancel)
-                {
-                    Application.Current.Shutdown();
-                    return null;
-                }
+                throw new SerializationException();
             }
             finally
             {

@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestBase.cs" />
+    <Compile Include="TimesheetTest.cs" />
     <Compile Include="UrlUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\DateUtilsTest.cs" />

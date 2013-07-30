@@ -9,12 +9,12 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public class HomePage : DeltekPageBase
     {
-        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri, bool triggeredByIframeRefresh)
+        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
         {
             return UrlUtils.OnTimeCollectionPage(uri) && !triggeredByIframeRefresh;
         }
 
-        public override void DoStuff(DeltekReminderSettings settings, WebBrowser browser)
+        public override void DoStuff(DeltekReminderContext ctx, WebBrowser browser)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var openTimesheet = unitFrameDocument.getElementsByTagName("tr")

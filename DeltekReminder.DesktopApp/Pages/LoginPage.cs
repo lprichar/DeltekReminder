@@ -9,18 +9,18 @@ namespace DeltekReminder.DesktopApp.Pages
     {
         int _attemptedLogins = 0;
 
-        public override bool OnThisPage(DeltekReminderSettings settings, Uri uri, bool triggeredByIframeRefresh)
+        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
         {
-            return uri == UrlUtils.GetLoginPage(settings.BaseUrl);
+            return uri == UrlUtils.GetLoginPage(ctx.Settings.BaseUrl);
         }
 
-        public override void DoStuff(DeltekReminderSettings settings, WebBrowser browser)
+        public override void DoStuff(DeltekReminderContext ctx, WebBrowser browser)
         {
             var loginFailed = _attemptedLogins > 0;
             if (!loginFailed)
             {
                 _attemptedLogins++;
-                EnterCredentialsAndSubmit(settings, browser);
+                EnterCredentialsAndSubmit(ctx.Settings, browser);
             }
         }
 
