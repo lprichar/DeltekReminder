@@ -14,7 +14,7 @@ namespace DeltekReminder.DesktopApp.Pages
             return UrlUtils.OnTimeCollectionPage(uri) && !triggeredByIframeRefresh;
         }
 
-        public override void DoStuff(DeltekReminderContext ctx, WebBrowser browser)
+        public override void TryGetTimesheet(DeltekReminderContext ctx, WebBrowser browser)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var openTimesheet = unitFrameDocument.getElementsByTagName("tr")

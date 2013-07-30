@@ -72,7 +72,7 @@ namespace DeltekReminder.DesktopApp
             Browser.LoadCompleted += Browser_LoadCompleted;
             Browser.Navigate(loginPageUri);
             var timesheetPage = new TimesheetPage();
-            timesheetPage.IsMissingTimeForToday += TimesheetPage_IsMissingTimeForToday;
+            timesheetPage.FoundTimesheet += TimesheetPageFoundTimesheet;
             _pages = new DeltekPageBase[]
                         {
                             new LoginPage(),
@@ -81,9 +81,12 @@ namespace DeltekReminder.DesktopApp
                         };
         }
 
-        private void TimesheetPage_IsMissingTimeForToday(object sender, IsMissingTimeForTodayArgs args)
+        private void TimesheetPageFoundTimesheet(object sender, FoundTimesheetArgs args)
         {
-            MessageBox.Show("Missing timesheet for today!");
+            if (args.Timesheet.IsMissingTimeForToday(_ctx))
+            {
+                MessageBox.Show("Missing timesheet for today!");
+            }
         }
 
         private void Browser_LoadCompleted(object sender, NavigationEventArgs args)
@@ -102,7 +105,7 @@ namespace DeltekReminder.DesktopApp
                 {
                     SubscribeToOnActivate(document);
                 }
-                currentPage.DoStuff(_ctx, Browser);
+                currentPage.TryGetTimesheet(_ctx, Browser);
             }
         }
 

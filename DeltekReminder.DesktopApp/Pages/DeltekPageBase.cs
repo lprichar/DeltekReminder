@@ -9,7 +9,7 @@ namespace DeltekReminder.DesktopApp.Pages
     {
         public abstract bool OnThisPage(DeltekReminderContext settings, Uri uri, bool triggeredByIframeRefresh);
 
-        public abstract void DoStuff(DeltekReminderContext settings, WebBrowser browser);
+        public abstract void TryGetTimesheet(DeltekReminderContext settings, WebBrowser browser);
 
         public static IHTMLWindow2 GetUnitFrameGlobal(WebBrowser browser)
         {

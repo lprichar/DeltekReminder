@@ -9,12 +9,12 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public class TimesheetPage : DeltekPageBase
     {
-        public event IsMissingTimeForToday IsMissingTimeForToday;
+        public event FoundTimesheet FoundTimesheet;
 
-        protected virtual void InvokeIsMissingTimeForToday(Timesheet timesheet)
+        protected virtual void InvokeFoundTimesheet(Timesheet timesheet)
         {
-            var handler = IsMissingTimeForToday;
-            if (handler != null) handler(this, new IsMissingTimeForTodayArgs { Timesheet = timesheet });
+            var handler = FoundTimesheet;
+            if (handler != null) handler(this, new FoundTimesheetArgs { Timesheet = timesheet });
         }
 
         public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
@@ -39,14 +39,11 @@ namespace DeltekReminder.DesktopApp.Pages
             return double.Parse(text);
         }
 
-        public override void DoStuff(DeltekReminderContext ctx, WebBrowser browser)
+        public override void TryGetTimesheet(DeltekReminderContext ctx, WebBrowser browser)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var timesheet = GetTimesheetFromDocument(unitFrameDocument);
-            if (timesheet.IsMissingTimeForToday(ctx))
-            {
-                InvokeIsMissingTimeForToday(timesheet);
-            }
+            InvokeFoundTimesheet(timesheet);
         }
 
         private Timesheet GetTimesheetFromDocument(HTMLDocument unitFrameDocument)
@@ -132,9 +129,9 @@ namespace DeltekReminder.DesktopApp.Pages
         }
     }
 
-    public delegate void IsMissingTimeForToday(object sender, IsMissingTimeForTodayArgs args);
+    public delegate void FoundTimesheet(object sender, FoundTimesheetArgs args);
 
-    public class IsMissingTimeForTodayArgs
+    public class FoundTimesheetArgs
     {
         public Timesheet Timesheet { get; set; }
     }
