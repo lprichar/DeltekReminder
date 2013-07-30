@@ -2,7 +2,7 @@
 {
     public class TimesheetProject
     {
-        public int RowNumber { get; set; }
+        public int Row { get; set; }
         public string ProjectNumber { get; set; }
         public string ChargeDescription { get; set; }
     }

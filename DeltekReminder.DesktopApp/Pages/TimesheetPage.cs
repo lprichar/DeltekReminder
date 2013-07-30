@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using DeltekReminder.Lib;
+using DeltekReminder.Lib.Utils;
 using mshtml;
 
 namespace DeltekReminder.DesktopApp.Pages
@@ -20,12 +22,79 @@ namespace DeltekReminder.DesktopApp.Pages
             return projectNumberCell.innerText;
         }
         
+        public double? GetHoursAtCell(HTMLDocument document, int row, int column)
+        {
+            var id = string.Format("hrs{0}_{1}", row, column);
+            var hoursCell = document.getElementById(id);
+            if (hoursCell == null) return null;
+            var text = hoursCell.innerText;
+            if (string.IsNullOrEmpty(text)) return null;
+            return double.Parse(text);
+        }
+
         public override void DoStuff(DeltekReminderSettings settings, WebBrowser browser)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
 
             Timesheet timesheet = new Timesheet();
 
+            PopulateTimesheetAttributes(unitFrameDocument, timesheet);
+            PopulateDays(unitFrameDocument, timesheet);
+            PopulateProjects(unitFrameDocument, timesheet);
+            PopulateEntries(unitFrameDocument, timesheet);
+        }
+
+        private void PopulateDays(HTMLDocument document, Timesheet timesheet)
+        {
+            for (var column = 0; column < timesheet.DaysInPeriod; column++)
+            {
+                var timesheetDay = new TimesheetDay
+                    {
+                        Column = column,
+                        Date = timesheet.StartingDate.AddDays(column)
+                    };
+
+                timesheet.Days.Add(timesheetDay);
+            }
+        }
+
+        private void PopulateTimesheetAttributes(HTMLDocument document, Timesheet timesheet)
+        {
+            var endingDateText = document.getElementById("endingDateSpan").innerText;
+            var endingDate = DateUtils.ParsePeriodEndingDate(endingDateText);
+
+            var daysInPeriod = document.getElementsByTagName("div")
+                                       .Cast<IHTMLElement>()
+                                       .Count(i => i.className == "hrsHeaderText" && !string.IsNullOrEmpty(i.innerText));
+
+            timesheet.EndingDate = endingDate;
+            timesheet.DaysInPeriod = daysInPeriod;
+            timesheet.StartingDate = endingDate.AddDays(-daysInPeriod);
+        }
+
+        private void PopulateEntries(HTMLDocument unitFrameDocument, Timesheet timesheet)
+        {
+            foreach (var project in timesheet.Projects)
+            {
+                foreach (var day in timesheet.Days)
+                {
+                    var hours = GetHoursAtCell(unitFrameDocument, project.Row, day.Column);
+                    MessageBox.Show(string.Format("Row {0}; Col: {1}; Val: {2}", project.Row, day.Column, hours));
+                    if (hours == null) continue;
+                    var timesheetEntry = new TimesheetEntry
+                    {
+                        Row = project.Row,
+                        Column = day.Column,
+                        Date = day.Date,
+                        Hours = hours.Value,
+                    };
+                    timesheet.Entries.Add(timesheetEntry);
+                }
+            }
+        }
+
+        private void PopulateProjects(HTMLDocument unitFrameDocument, Timesheet timesheet)
+        {
             int row = 0;
             while (true)
             {
@@ -36,7 +105,7 @@ namespace DeltekReminder.DesktopApp.Pages
 
                 var project = new TimesheetProject
                     {
-                        RowNumber = row,
+                        Row = row,
                         ProjectNumber = projectNumber,
                         ChargeDescription = chargeDescription,
                     };
@@ -44,8 +113,6 @@ namespace DeltekReminder.DesktopApp.Pages
                 timesheet.Projects.Add(project);
                 row++;
             }
-
-            MessageBox.Show("Total Projects: " + timesheet.Projects.Count);
         }
     }
 }
