@@ -35,7 +35,7 @@ namespace DeltekReminder.DesktopApp
             if (credentialsExist)
             {
                 PopulateControlValuesFromSettings();
-                Login();
+                //Login();
             }
         }
 
