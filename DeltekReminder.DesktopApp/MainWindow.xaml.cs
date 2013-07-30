@@ -70,7 +70,6 @@ namespace DeltekReminder.DesktopApp
             var loginPageUri = UrlUtils.GetLoginPage(_ctx.Settings.BaseUrl);
 
             Browser.LoadCompleted += Browser_LoadCompleted;
-            Browser.Navigate(loginPageUri);
             var timesheetPage = new TimesheetPage();
             timesheetPage.FoundTimesheet += TimesheetPageFoundTimesheet;
             _pages = new DeltekPageBase[]
@@ -79,6 +78,7 @@ namespace DeltekReminder.DesktopApp
                             new HomePage(),
                             timesheetPage
                         };
+            Browser.Navigate(loginPageUri);
         }
 
         private void TimesheetPageFoundTimesheet(object sender, FoundTimesheetArgs args)
@@ -120,6 +120,15 @@ namespace DeltekReminder.DesktopApp
         public void DocumentOnActivate(IHTMLEventObj evo)
         {
             OnNavigatedToNewPage(triggeredByIframeRefresh: true);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (WindowState != WindowState.Minimized)
+            {
+                e.Cancel = true;
+                WindowState = WindowState.Minimized;
+            }
         }
     }
 }
