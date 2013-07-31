@@ -13,14 +13,14 @@ namespace DeltekReminder.DesktopApp.Pages
 
         public static IHTMLWindow2 GetUnitFrameGlobal(WebBrowser browser)
         {
-            var document = (HTMLDocument)browser.Document;
+            var document = browser.Document as HTMLDocument;
             if (document.frames.length == 0) return null;
-            var unitFrame = document.frames.item("unitFrame");
-            if (unitFrame == null)
+            var unitFrame = document.frames.item(1) as IHTMLWindow2;
+            if (unitFrame == null || unitFrame.name != "unitFrame")
             {
                 throw new Exception("Unable to find unitFrame iframe");
             }
-            return (IHTMLWindow2)unitFrame;
+            return unitFrame;
         }
 
         public IHTMLWindow2 GetUnitFrame(WebBrowser browser)
