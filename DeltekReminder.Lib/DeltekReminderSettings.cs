@@ -19,6 +19,8 @@ namespace DeltekReminder.Lib
         
         public string BaseUrl { get; set; }
 
+        public DateTime? LastSuccessfulDeltekCheck { get; set; }
+
         private static string GetConfigFileName()
         {
             string path = GetDeltekReminderAppDataFolder();
