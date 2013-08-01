@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using System.Windows.Navigation;
+﻿using System;
+using System.Windows.Controls;
 
 namespace DeltekReminder.DesktopApp
 {
@@ -7,12 +7,14 @@ namespace DeltekReminder.DesktopApp
     {
         protected void NavigateToStatusPage(DeltekReminderUiContext ctx)
         {
-            ((NavigationWindow)Parent).Source = ctx.NavigationHelper.StatusPage;
+            if (NavigationService == null) throw new NullReferenceException("NavigationService is null");
+            NavigationService.Navigate(ctx.NavigationHelper.StatusPage);
         }
 
         protected void NavigateToCredentialsPage(DeltekReminderUiContext ctx)
         {
-            ((NavigationWindow)Parent).Source = ctx.NavigationHelper.CredentialsPage;
+            if (NavigationService == null) throw new NullReferenceException("NavigationService is null");
+            NavigationService.Navigate(ctx.NavigationHelper.CredentialsPage);
         }
     }
 }

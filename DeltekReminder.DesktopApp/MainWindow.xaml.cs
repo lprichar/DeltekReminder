@@ -15,7 +15,7 @@ namespace DeltekReminder.DesktopApp
         {
             InitializeComponent();
             _ctx = DeltekReminderUiContext.GetInstance();
-            Source = GetInitialPage();
+            NavigationService.Navigate(GetInitialPage());
         }
 
         private Uri GetInitialPage()
