@@ -11,6 +11,7 @@
     Closing="Window_Closing"
     Source="Credentials.xaml"
     ShowsNavigationUI="False"            
+    Navigating="MainWindow_OnNavigating"
     >
 
     <NavigationWindow.Template>
@@ -32,8 +33,11 @@
                 </Grid>
 
                 <Grid Background="White">
-                <ContentPresenter Margin="20" Content="{TemplateBinding Content}"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                <ContentPresenter 
+                    Name="MainContentPresenter"
+                    Margin="20" 
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}"/>
                 </Grid>
             </DockPanel>
         </ControlTemplate>

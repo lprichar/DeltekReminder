@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
-using DeltekReminder.Lib;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace DeltekReminder.DesktopApp
 {
@@ -34,6 +38,49 @@ namespace DeltekReminder.DesktopApp
                 e.Cancel = true;
                 WindowState = WindowState.Minimized;
             }
+        }
+
+        private bool _allowDirectNavigation = false;
+        private readonly Duration _duration = new Duration(TimeSpan.FromSeconds(.2));
+        
+        private void MainWindow_OnNavigating(object sender, NavigatingCancelEventArgs navArgs)
+        {
+            var contentPresenter = GetContentPresenter();
+            if (contentPresenter == null) return;
+            
+            if (!_allowDirectNavigation)
+            {
+                navArgs.Cancel = true;
+
+                DoubleAnimation animation0 = new DoubleAnimation {From = 1, To = 0, Duration = _duration};
+                animation0.Completed += (s2, e2) => SlideCompleted(navArgs);
+                contentPresenter.BeginAnimation(OpacityProperty, animation0);
+            }
+            _allowDirectNavigation = false;
+        }
+
+        private ContentPresenter GetContentPresenter()
+        {
+            if (Template == null) return null;
+            return (ContentPresenter)Template.FindName("MainContentPresenter", this);
+        }
+
+        private void SlideCompleted(NavigatingCancelEventArgs navArgs)
+        {
+            _allowDirectNavigation = true;
+            if (navArgs.NavigationMode != NavigationMode.New) return;
+            if (navArgs.Uri != null)
+                Navigate(navArgs.Uri);
+            else
+                Navigate(navArgs.Content);
+
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded,
+                (ThreadStart)delegate
+                {
+                    var contentPresenter = GetContentPresenter();
+                    DoubleAnimation animation0 = new DoubleAnimation {From = 0, To = 1, Duration = _duration};
+                    contentPresenter.BeginAnimation(OpacityProperty, animation0);
+                });
         }
     }
 }
