@@ -88,11 +88,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DeltekReminderUiContext.cs" />
     <Compile Include="DhtmlEventHandler.cs" />
     <Compile Include="Credentials.xaml.cs">
       <DependentUpon>Credentials.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NavigationHelper.cs" />
+    <Compile Include="PageBase.cs" />
     <Compile Include="Pages\DeltekPageBase.cs" />
+    <Compile Include="Pages\FailedLoginArgs.cs" />
+    <Compile Include="Status.xaml.cs">
+      <DependentUpon>Status.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,6 +115,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Credentials.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Status.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

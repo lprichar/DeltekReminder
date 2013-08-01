@@ -7,7 +7,14 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public class LoginPage : DeltekPageBase
     {
+        public event FailedLogin FailedLogin;
         int _attemptedLogins = 0;
+
+        protected virtual void InvokeFailedLogin()
+        {
+            var handler = FailedLogin;
+            if (handler != null) handler(this, new FailedLoginArgs());
+        }
 
         public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
         {
@@ -17,7 +24,11 @@ namespace DeltekReminder.DesktopApp.Pages
         public override void TryGetTimesheet(DeltekReminderContext ctx, WebBrowser browser)
         {
             var loginFailed = _attemptedLogins > 0;
-            if (!loginFailed)
+            if (loginFailed)
+            {
+                InvokeFailedLogin();
+            }
+            else
             {
                 _attemptedLogins++;
                 EnterCredentialsAndSubmit(ctx.Settings, browser);
@@ -42,4 +53,5 @@ namespace DeltekReminder.DesktopApp.Pages
             element.setAttribute("value", value);
         }
     }
+
 }

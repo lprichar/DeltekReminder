@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using DeltekReminder.Lib;
 
 namespace DeltekReminder.DesktopApp
@@ -8,11 +9,22 @@ namespace DeltekReminder.DesktopApp
     /// </summary>
     public partial class MainWindow
     {
-        private readonly DeltekReminderContext _ctx;
+        private readonly DeltekReminderUiContext _ctx;
 
         public MainWindow()
         {
             InitializeComponent();
+            _ctx = DeltekReminderUiContext.GetInstance();
+            Source = GetInitialPage();
+        }
+
+        private Uri GetInitialPage()
+        {
+            if (_ctx.Settings.LastSuccessfulDeltekCheck.HasValue)
+            {
+                return _ctx.NavigationHelper.StatusPage;
+            }
+            return _ctx.NavigationHelper.CredentialsPage;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
