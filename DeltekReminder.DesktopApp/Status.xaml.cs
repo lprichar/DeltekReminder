@@ -128,6 +128,7 @@ namespace DeltekReminder.DesktopApp
             else
             {
                 _ctx.SchedulerService.ResetTimer(_ctx, OnTimeToCheckDeltek);
+                Databind();
             }
         }
 
