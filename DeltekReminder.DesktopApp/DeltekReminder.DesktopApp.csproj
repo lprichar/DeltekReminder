@@ -97,6 +97,7 @@
     <Compile Include="PageBase.cs" />
     <Compile Include="Pages\DeltekPageBase.cs" />
     <Compile Include="Pages\FailedLoginArgs.cs" />
+    <Compile Include="Pages\SuccessfulLoginArgs.cs" />
     <Compile Include="Status.xaml.cs">
       <DependentUpon>Status.xaml</DependentUpon>
     </Compile>

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using DeltekReminder.DesktopApp.Pages;
 using DeltekReminder.Lib;
 using mshtml;
@@ -20,12 +21,46 @@ namespace DeltekReminder.DesktopApp
             InitializeComponent();
             Browser.LoadCompleted += Browser_LoadCompleted;
             _ctx = DeltekReminderUiContext.GetInstance();
-            
-            if (_ctx.Settings.LastSuccessfulDeltekCheck.HasValue)
+
+            if (_ctx.Settings.LastSuccessfulLogin.HasValue)
             {
-                LastSuccessfulDeltekCheck.Text = _ctx.Settings.LastSuccessfulDeltekCheck.Value.ToLongDateString();
+                EnsureTimerExists();
             }
-            Login();
+            else
+            {
+                Login();
+            }
+            Databind();
+        }
+
+        private void EnsureTimerExists()
+        {
+            _ctx.SchedulerService.EnsureTimerExists(_ctx, OnTimeToCheckDeltek);
+            Databind();
+        }
+
+        private void Databind()
+        {
+            LastSuccessfulDeltekCheck.Text = _ctx.Settings.GetLastStatusAsText();
+            NextCheck.Text = _ctx.SchedulerService.GetNextTimeToCheckAsText();
+        }
+
+        private void OnTimeToCheckDeltek(object state)
+        {
+            Dispatcher.BeginInvoke(new Action(Login), DispatcherPriority.Normal, null);
+        }
+
+        private void SuccessfulLogin(object sender, SuccessfulLoginArgs args)
+        {
+            EnsureTimerExists();
+            _ctx.Settings.LastSuccessfulLogin = _ctx.Now;
+            _ctx.Settings.Save();
+            var thisIsTheFirstSuccessfulLogin = !_ctx.Settings.LastSuccessfulLogin.HasValue;
+            if (thisIsTheFirstSuccessfulLogin)
+            {
+                args.Cancel = true;
+            }
+            Databind();
         }
 
         private void Login()
@@ -34,12 +69,14 @@ namespace DeltekReminder.DesktopApp
 
             var timesheetPage = new TimesheetPage();
             var loginPage = new LoginPage();
+            var homePage = new HomePage();
             timesheetPage.FoundTimesheet += TimesheetPageFoundTimesheet;
             loginPage.FailedLogin += LoginPageFailedLogin;
+            homePage.SuccessfulLogin += SuccessfulLogin;
             _pages = new DeltekPageBase[]
                         {
                             loginPage,
-                            new HomePage(),
+                            homePage,
                             timesheetPage
                         };
             Browser.Navigate(loginPageUri);
@@ -54,8 +91,6 @@ namespace DeltekReminder.DesktopApp
 
         private void TimesheetPageFoundTimesheet(object sender, FoundTimesheetArgs args)
         {
-            // todo: Set _ctx.LastSuccessfulDeltekCheck = _ctx.Now and Save();
-            
             if (args.Timesheet.IsMissingTimeForToday(_ctx))
             {
                 MessageBox.Show("Missing timesheet for today!");

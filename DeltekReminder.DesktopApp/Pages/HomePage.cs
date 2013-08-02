@@ -9,6 +9,14 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public class HomePage : DeltekPageBase
     {
+        public event SuccessfulLogin SuccessfulLogin;
+
+        protected virtual void OnSuccessfulLogin(SuccessfulLoginArgs args)
+        {
+            var handler = SuccessfulLogin;
+            if (handler != null) handler(this, args);
+        }
+
         public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
         {
             return UrlUtils.OnTimeCollectionPage(uri) && !triggeredByIframeRefresh;
@@ -16,6 +24,11 @@ namespace DeltekReminder.DesktopApp.Pages
 
         public override void TryGetTimesheet(DeltekReminderContext ctx, WebBrowser browser)
         {
+            // if we got to this page it must have been a successful login, because this is where deltek sends you on login success
+            var args = new SuccessfulLoginArgs();
+            OnSuccessfulLogin(args);
+            if (args.Cancel) return;
+            
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var openTimesheet = unitFrameDocument.getElementsByTagName("tr")
                 .Cast<IHTMLElement>()

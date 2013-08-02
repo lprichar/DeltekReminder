@@ -53,5 +53,4 @@ namespace DeltekReminder.DesktopApp.Pages
             element.setAttribute("value", value);
         }
     }
-
 }

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SchedulerServiceTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TimesheetTest.cs" />
     <Compile Include="UrlUtilsTest.cs" />

@@ -19,7 +19,7 @@ namespace DeltekReminder.Lib
         
         public string BaseUrl { get; set; }
 
-        public DateTime? LastSuccessfulDeltekCheck { get; set; }
+        public DateTime? LastSuccessfulLogin { get; set; }
 
         private static string GetConfigFileName()
         {
@@ -99,6 +99,12 @@ namespace DeltekReminder.Lib
                     }
                 }
             }
+        }
+
+        public string GetLastStatusAsText()
+        {
+            if (LastSuccessfulLogin == null) return null;
+            return LastSuccessfulLogin.Value.ToLongDateString() + " " + LastSuccessfulLogin.Value.ToLongTimeString();
         }
     }
 }

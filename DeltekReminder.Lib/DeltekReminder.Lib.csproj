@@ -46,6 +46,7 @@
     <Compile Include="DeltekReminderContext.cs" />
     <Compile Include="DeltekReminderSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchedulerService.cs" />
     <Compile Include="Timesheet.cs" />
     <Compile Include="TimesheetDay.cs" />
     <Compile Include="TimesheetEntry.cs" />

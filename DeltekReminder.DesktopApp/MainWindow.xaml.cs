@@ -24,7 +24,7 @@ namespace DeltekReminder.DesktopApp
 
         private Uri GetInitialPage()
         {
-            if (_ctx.Settings.LastSuccessfulDeltekCheck.HasValue)
+            if (_ctx.Settings.LastSuccessfulLogin.HasValue)
             {
                 return _ctx.NavigationHelper.StatusPage;
             }
