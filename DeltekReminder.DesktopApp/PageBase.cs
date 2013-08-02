@@ -16,5 +16,13 @@ namespace DeltekReminder.DesktopApp
             if (NavigationService == null) throw new NullReferenceException("NavigationService is null");
             NavigationService.Navigate(ctx.NavigationHelper.CredentialsPage);
         }
+
+        protected void SetStatus(string statusText)
+        {
+            var dependencyObject = Parent;
+            var parent = (MainWindow)dependencyObject;
+            parent.SetStatus(statusText);
+        }
     }
+
 }

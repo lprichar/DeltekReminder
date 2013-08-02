@@ -9,11 +9,32 @@ namespace DeltekReminder.DesktopApp.Pages
     {
         public abstract bool OnThisPage(DeltekReminderContext settings, Uri uri, bool triggeredByIframeRefresh);
 
-        public abstract void TryGetTimesheet(DeltekReminderContext settings, WebBrowser browser);
+        public void TryGetTimesheet(DeltekReminderContext settings, WebBrowser browser)
+        {
+            try
+            {
+                TryGetTimesheetInternal(settings, browser);
+            }
+            catch (Exception ex)
+            {
+                InvokeOnError(ex);
+            }
+        }
+
+        public abstract void TryGetTimesheetInternal(DeltekReminderContext settings, WebBrowser browser);
+
+        public event OnError OnError;
+
+        protected virtual void InvokeOnError(Exception ex)
+        {
+            var handler = OnError;
+            if (handler != null) handler(this, new OnErrorArgs { Exception = ex });
+        }
 
         public static IHTMLWindow2 GetUnitFrameGlobal(WebBrowser browser)
         {
             var document = browser.Document as HTMLDocument;
+            if (document == null) throw new Exception("Unable to find unitFrame iframe, document was null");
             if (document.frames.length == 0) return null;
             var unitFrame = document.frames.item(1) as IHTMLWindow2;
             if (unitFrame == null || unitFrame.name != "unitFrame")

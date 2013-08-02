@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification;assembly=Hardcodet.Wpf.TaskbarNotification"
+    xmlns:local="clr-namespace:DeltekReminder.DesktopApp"
     Title="Deltek Reminder" 
     Height="369" 
     Width="525" 
@@ -17,15 +18,19 @@
     <NavigationWindow.Template>
         <ControlTemplate TargetType="NavigationWindow">
             <DockPanel>
-                <!--<Label Content="StatusBar..." 
-                       Background="LightGray"
-                       DockPanel.Dock="Bottom"/>-->
-
                 <tb:TaskbarIcon
                     IconSource="DeltekReminder.ico"
                     ToolTipText="Hello world" />
 
                 <Grid Background="#FF0091BE" DockPanel.Dock="Top">
+                    <Grid Visibility="Collapsed" Width="200" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0" Height="3" Name="LoadingAnimation">
+                        <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.0" />
+                        <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.2" />
+                        <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.4" />
+                        <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.6" />
+                        <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.8" />
+                    </Grid>
+                    <TextBlock Visibility="Collapsed" FontSize="10" Name="StatusText" HorizontalAlignment="Right" Margin="0,6,10,0" Foreground="White">Logging In...</TextBlock>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="10">
                         <Image Source="WhiteIcon.png" Height="30" Stretch="Fill" Margin="0,0,10,0"/>
                         <TextBlock FontSize="25" Height="30" Foreground="White">Deltek Reminder</TextBlock>

@@ -10,7 +10,7 @@
 	Title="Status">
 
     <Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="200">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="200" Margin="0,0,0,10">
             <StackPanel>
                 <TextBlock FontWeight="Bold">Last checked:</TextBlock>
                 <TextBlock x:Name="LastSuccessfulDeltekCheck">1/1/2013</TextBlock>

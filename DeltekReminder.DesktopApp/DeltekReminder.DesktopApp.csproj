@@ -93,14 +93,23 @@
     <Compile Include="Credentials.xaml.cs">
       <DependentUpon>Credentials.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LoadingRectangle.xaml.cs">
+      <DependentUpon>LoadingRectangle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NavigationHelper.cs" />
+    <Compile Include="Pages\OnErrorArgs.cs" />
     <Compile Include="PageBase.cs" />
     <Compile Include="Pages\DeltekPageBase.cs" />
     <Compile Include="Pages\FailedLoginArgs.cs" />
+    <Compile Include="Pages\NoActiveTimesheetArgs.cs" />
     <Compile Include="Pages\SuccessfulLoginArgs.cs" />
     <Compile Include="Status.xaml.cs">
       <DependentUpon>Status.xaml</DependentUpon>
     </Compile>
+    <Page Include="LoadingRectangle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1,0 +1,42 @@
+﻿<UserControl
+    x:Class="DeltekReminder.DesktopApp.LoadingRectangle"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="6" 
+    d:DesignWidth="900" 
+    Background="{x:Null}"    
+    >
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
+        <Rectangle x:Name="Rectangle" Fill="White" Height="6" Width="6" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left">
+            <Rectangle.Triggers>
+                <EventTrigger RoutedEvent="Rectangle.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="Rectangle">
+                                <EasingDoubleKeyFrame x:Name="KeyFrame1" KeyTime="0" Value="-10"/>
+                                <EasingDoubleKeyFrame x:Name="KeyFrame2" KeyTime="0:0:1" Value="330"/>
+                                <EasingDoubleKeyFrame x:Name="KeyFrame3" KeyTime="0:0:4" Value="660"/>
+                                <EasingDoubleKeyFrame x:Name="KeyFrame4" KeyTime="0:0:5" Value="1000"/>
+                                <EasingDoubleKeyFrame x:Name="KeyFrame5" KeyTime="0:0:6" Value="1000"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Rectangle.Triggers>
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+    </Grid>
+</UserControl>

@@ -20,7 +20,7 @@ namespace DeltekReminder.Lib
         public virtual DateTime Now
         {
             get { return DateTime.Now; }
-            //get { return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 59, 50); } // Today at 4:59 PM
+            //get { return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 59, 55); } // Today at 4:59 PM
         }
 
         public DeltekReminderSettings Settings

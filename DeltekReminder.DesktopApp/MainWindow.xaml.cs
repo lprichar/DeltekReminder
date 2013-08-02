@@ -31,6 +31,22 @@ namespace DeltekReminder.DesktopApp
             return _ctx.NavigationHelper.CredentialsPage;
         }
 
+        public void SetStatus(string statusText)
+        {
+            var showStatus = !string.IsNullOrEmpty(statusText);
+            var loadingAnimation = GetElementByName<FrameworkElement>("LoadingAnimation");
+            var statusTextElement = GetElementByName<TextBlock>("StatusText");
+            SetVisible(loadingAnimation, showStatus);
+            SetVisible(statusTextElement, showStatus);
+            if (statusText != null)
+                statusTextElement.Text = statusText;
+        }
+
+        public void SetVisible(FrameworkElement element, bool visible)
+        {
+            element.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (WindowState != WindowState.Minimized)
@@ -45,7 +61,7 @@ namespace DeltekReminder.DesktopApp
         
         private void MainWindow_OnNavigating(object sender, NavigatingCancelEventArgs navArgs)
         {
-            var contentPresenter = GetContentPresenter();
+            var contentPresenter = GetElementByName<ContentPresenter>("MainContentPresenter");
             if (contentPresenter == null) return;
             
             if (!_allowDirectNavigation)
@@ -59,10 +75,10 @@ namespace DeltekReminder.DesktopApp
             _allowDirectNavigation = false;
         }
 
-        private ContentPresenter GetContentPresenter()
+        private T GetElementByName<T>(string name) where T : FrameworkElement
         {
             if (Template == null) return null;
-            return (ContentPresenter)Template.FindName("MainContentPresenter", this);
+            return Template.FindName(name, this) as T;
         }
 
         private void SlideCompleted(NavigatingCancelEventArgs navArgs)
@@ -77,7 +93,7 @@ namespace DeltekReminder.DesktopApp
             Dispatcher.BeginInvoke(DispatcherPriority.Loaded,
                 (ThreadStart)delegate
                 {
-                    var contentPresenter = GetContentPresenter();
+                    var contentPresenter = GetElementByName<ContentPresenter>("MainContentPresenter");
                     DoubleAnimation animation0 = new DoubleAnimation {From = 0, To = 1, Duration = _duration};
                     contentPresenter.BeginAnimation(OpacityProperty, animation0);
                 });

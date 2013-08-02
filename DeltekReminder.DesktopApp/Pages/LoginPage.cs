@@ -21,7 +21,7 @@ namespace DeltekReminder.DesktopApp.Pages
             return uri == UrlUtils.GetLoginPage(ctx.Settings.BaseUrl);
         }
 
-        public override void TryGetTimesheet(DeltekReminderContext ctx, WebBrowser browser)
+        public override void TryGetTimesheetInternal(DeltekReminderContext ctx, WebBrowser browser)
         {
             var loginFailed = _attemptedLogins > 0;
             if (loginFailed)

@@ -39,7 +39,7 @@ namespace DeltekReminder.DesktopApp.Pages
             return double.Parse(text);
         }
 
-        public override void TryGetTimesheet(DeltekReminderContext ctx, WebBrowser browser)
+        public override void TryGetTimesheetInternal(DeltekReminderContext ctx, WebBrowser browser)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var timesheet = GetTimesheetFromDocument(unitFrameDocument);

@@ -21,13 +21,18 @@ namespace DeltekReminder.DesktopApp
             InitializeComponent();
             Browser.LoadCompleted += Browser_LoadCompleted;
             _ctx = DeltekReminderUiContext.GetInstance();
+        }
 
+        protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
             if (_ctx.Settings.LastSuccessfulLogin.HasValue)
             {
                 EnsureTimerExists();
             }
             else
             {
+                // login needs to occur in OnRender because it calls SetStatus which requires that the parent NavigationWindow's template has been rendered
                 Login();
             }
             Databind();
@@ -59,12 +64,14 @@ namespace DeltekReminder.DesktopApp
             if (thisIsTheFirstSuccessfulLogin)
             {
                 args.Cancel = true;
+                SetStatus(null);
             }
             Databind();
         }
 
         private void Login()
         {
+            SetStatus("Logging in...");
             var loginPageUri = UrlUtils.GetLoginPage(_ctx.Settings.BaseUrl);
 
             var timesheetPage = new TimesheetPage();
@@ -73,17 +80,35 @@ namespace DeltekReminder.DesktopApp
             timesheetPage.FoundTimesheet += TimesheetPageFoundTimesheet;
             loginPage.FailedLogin += LoginPageFailedLogin;
             homePage.SuccessfulLogin += SuccessfulLogin;
+            homePage.NoActiveTimesheet += OnNoActiveTimesheet;
             _pages = new DeltekPageBase[]
                         {
                             loginPage,
                             homePage,
                             timesheetPage
                         };
+            foreach (var page in _pages)
+            {
+                page.OnError += OnGetTimesheetError;
+            }
             Browser.Navigate(loginPageUri);
+        }
+
+        private void OnGetTimesheetError(object sender, OnErrorArgs args)
+        {
+            SetStatus(null);
+            MessageBox.Show("The following error occurred getting the timesheet: " + args.Exception);
+        }
+
+        private void OnNoActiveTimesheet(object sender, NoActiveTimesheetArgs args)
+        {
+            SetStatus(null);
+            MessageBox.Show("No active timesheet");
         }
 
         private void LoginPageFailedLogin(object sender, FailedLoginArgs args)
         {
+            SetStatus(null);
             NavigateToCredentialsPage(_ctx);
         }
 
@@ -91,6 +116,7 @@ namespace DeltekReminder.DesktopApp
 
         private void TimesheetPageFoundTimesheet(object sender, FoundTimesheetArgs args)
         {
+            SetStatus(null); 
             if (args.Timesheet.IsMissingTimeForToday(_ctx))
             {
                 MessageBox.Show("Missing timesheet for today!");
