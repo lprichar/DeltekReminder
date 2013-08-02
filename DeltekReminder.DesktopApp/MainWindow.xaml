@@ -21,7 +21,15 @@
                 <tb:TaskbarIcon
                     Name="TaskbarIcon"
                     IconSource="DeltekReminder.ico"
-                    ToolTipText="Hello world" />
+                    ToolTipText="Deltek Reminder">
+
+                    <tb:TaskbarIcon.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Exit" Click="Exit_OnClick" />
+                        </ContextMenu>
+                    </tb:TaskbarIcon.ContextMenu>
+                    
+                </tb:TaskbarIcon>
 
                 <Grid Background="#FF0091BE" DockPanel.Dock="Top">
                     <Grid Visibility="Collapsed" Width="200" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0" Height="3" Name="LoadingAnimation">
