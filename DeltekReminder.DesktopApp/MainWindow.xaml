@@ -21,7 +21,8 @@
                 <tb:TaskbarIcon
                     Name="TaskbarIcon"
                     IconSource="DeltekReminder.ico"
-                    ToolTipText="Deltek Reminder">
+                    ToolTipText="Deltek Reminder"
+                    TrayMouseDoubleClick="TaskbarIcon_OnTrayMouseDoubleClick">
 
                     <tb:TaskbarIcon.ContextMenu>
                         <ContextMenu>

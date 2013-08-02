@@ -21,6 +21,10 @@ namespace DeltekReminder.DesktopApp
             InitializeComponent();
             _ctx = DeltekReminderUiContext.GetInstance();
             NavigationService.Navigate(GetInitialPage());
+            if (_ctx.Settings.LastSuccessfulLogin.HasValue)
+            {
+                WindowState = WindowState.Minimized;
+            }
         }
 
         private Uri GetInitialPage()
@@ -109,6 +113,11 @@ namespace DeltekReminder.DesktopApp
         private void Exit_OnClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void TaskbarIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Normal;
         }
     }
 }
