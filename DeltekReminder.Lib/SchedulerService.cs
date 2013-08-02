@@ -11,18 +11,18 @@ namespace DeltekReminder.Lib
 
         public void EnsureTimerExists(DeltekReminderContext ctx, TimerCallback onTimeToCheckDeltek)
         {
-            if (_timer == null)
-            {
-                _timer = new Timer(onTimeToCheckDeltek);
-            }
+            if (_timer != null) return;
+            
+            _timer = new Timer(onTimeToCheckDeltek);
             var destinationTime = GetNextTimeToCheckDeltek(ctx);
             _nextCheck = destinationTime;
             var timeUntilDestinationTime = destinationTime - ctx.Now;
-            _timer.Change(timeUntilDestinationTime, new TimeSpan(0, 0, REMIND_USER_IN_MINUTES, 0));
+            _timer.Change(timeUntilDestinationTime, new TimeSpan(0, REMIND_USER_IN_MINUTES, 0));
         }
 
         public void ResetTimer(DeltekReminderContext ctx, TimerCallback onTime)
         {
+            if (_timer != null) _timer.Dispose();
             _timer = null;
             _nextCheck = null;
             EnsureTimerExists(ctx, onTime);

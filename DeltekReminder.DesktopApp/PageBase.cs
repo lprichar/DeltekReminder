@@ -19,9 +19,19 @@ namespace DeltekReminder.DesktopApp
 
         protected void SetStatus(string statusText)
         {
-            var dependencyObject = Parent;
-            var parent = (MainWindow)dependencyObject;
+            var parent = GetMainWindow();
             parent.SetStatus(statusText);
+        }
+
+        private MainWindow GetMainWindow()
+        {
+            return Parent as MainWindow;
+        }
+
+        protected void SetTrayAlert(string message)
+        {
+            var parent = GetMainWindow();
+            parent.SetTrayAlert(message);
         }
     }
 

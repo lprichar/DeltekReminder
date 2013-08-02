@@ -19,6 +19,7 @@
         <ControlTemplate TargetType="NavigationWindow">
             <DockPanel>
                 <tb:TaskbarIcon
+                    Name="TaskbarIcon"
                     IconSource="DeltekReminder.ico"
                     ToolTipText="Hello world" />
 

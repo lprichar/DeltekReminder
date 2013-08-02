@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace DeltekReminder.DesktopApp
 {
@@ -31,6 +32,12 @@ namespace DeltekReminder.DesktopApp
             return _ctx.NavigationHelper.CredentialsPage;
         }
 
+        public void SetTrayAlert(string message)
+        {
+            TaskbarIcon taskbarIcon = GetElementByName<TaskbarIcon>("TaskbarIcon");
+            taskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
+        }
+        
         public void SetStatus(string statusText)
         {
             var showStatus = !string.IsNullOrEmpty(statusText);

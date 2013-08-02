@@ -57,14 +57,18 @@ namespace DeltekReminder.DesktopApp
 
         private void SuccessfulLogin(object sender, SuccessfulLoginArgs args)
         {
-            EnsureTimerExists();
             _ctx.Settings.LastSuccessfulLogin = _ctx.Now;
             _ctx.Settings.Save();
             var thisIsTheFirstSuccessfulLogin = !_ctx.Settings.LastSuccessfulLogin.HasValue;
             if (thisIsTheFirstSuccessfulLogin)
             {
+                EnsureTimerExists();
                 args.Cancel = true;
                 SetStatus(null);
+            }
+            else
+            {
+                SetStatus("Getting active timesheet...");
             }
             Databind();
         }
@@ -97,13 +101,13 @@ namespace DeltekReminder.DesktopApp
         private void OnGetTimesheetError(object sender, OnErrorArgs args)
         {
             SetStatus(null);
-            MessageBox.Show("The following error occurred getting the timesheet: " + args.Exception);
+            SetTrayAlert("The following error occurred getting the timesheet: " + args.Exception);
         }
 
         private void OnNoActiveTimesheet(object sender, NoActiveTimesheetArgs args)
         {
             SetStatus(null);
-            MessageBox.Show("No active timesheet");
+            SetTrayAlert("No active timesheet");
         }
 
         private void LoginPageFailedLogin(object sender, FailedLoginArgs args)
@@ -119,7 +123,11 @@ namespace DeltekReminder.DesktopApp
             SetStatus(null); 
             if (args.Timesheet.IsMissingTimeForToday(_ctx))
             {
-                MessageBox.Show("Missing timesheet for today!");
+                SetTrayAlert("Missing timesheet for today!");
+            }
+            else
+            {
+                _ctx.SchedulerService.ResetTimer(_ctx, OnTimeToCheckDeltek);
             }
         }
 
