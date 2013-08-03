@@ -1,9 +1,17 @@
-﻿using System;
+﻿#define pretendIts4_59_pm
+
+using System;
 
 namespace DeltekReminder.Lib
 {
     public class DeltekReminderContext
     {
+
+#if (pretendIts4_59_pm)
+        private readonly DateTime _fakeStartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 59, 55);  // Today at 4:59 PM
+        private readonly DateTime _startedApp = DateTime.Now;
+#endif
+
         public DeltekReminderContext()
         {
             _settings = DeltekReminderSettings.GetSettings();
@@ -19,8 +27,11 @@ namespace DeltekReminder.Lib
 
         public virtual DateTime Now
         {
+#if (pretendIts4_59_pm)
+            get { return _fakeStartDate + (DateTime.Now - _startedApp); }
+#else
             get { return DateTime.Now; }
-            //get { return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 59, 55); } // Today at 4:59 PM
+#endif
         }
 
         public DeltekReminderSettings Settings
