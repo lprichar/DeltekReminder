@@ -83,7 +83,7 @@ namespace DeltekReminder.DesktopApp.Pages
 
             timesheet.EndingDate = endingDate;
             timesheet.DaysInPeriod = daysInPeriod;
-            timesheet.StartingDate = endingDate.AddDays(-daysInPeriod);
+            timesheet.StartingDate = endingDate.AddDays(-daysInPeriod+1);
         }
 
         private void PopulateEntries(HTMLDocument unitFrameDocument, Timesheet timesheet)
