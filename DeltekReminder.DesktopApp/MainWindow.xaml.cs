@@ -23,8 +23,13 @@ namespace DeltekReminder.DesktopApp
             NavigationService.Navigate(GetInitialPage());
             if (_ctx.Settings.LastSuccessfulLogin.HasValue)
             {
-                WindowState = WindowState.Minimized;
+                SetWindowVisible(false);
             }
+        }
+
+        private void SetWindowVisible(bool visible)
+        {
+            Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private Uri GetInitialPage()
@@ -40,6 +45,9 @@ namespace DeltekReminder.DesktopApp
         {
             TaskbarIcon taskbarIcon = GetElementByName<TaskbarIcon>("TaskbarIcon");
             taskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
+
+            var toolTipText = string.IsNullOrEmpty(message) ? "Deltek Reminder" : message;
+            taskbarIcon.ToolTipText = toolTipText; // this is required, according to the documentation, for older operating systems that don't support rich ToolTips (XP/2003)
         }
         
         public void SetStatus(string statusText)
@@ -60,11 +68,8 @@ namespace DeltekReminder.DesktopApp
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (WindowState != WindowState.Minimized)
-            {
-                e.Cancel = true;
-                WindowState = WindowState.Minimized;
-            }
+            e.Cancel = true;
+            SetWindowVisible(false);
         }
 
         private bool _allowDirectNavigation = false;
@@ -117,7 +122,7 @@ namespace DeltekReminder.DesktopApp
 
         private void TaskbarIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Normal;
+            SetWindowVisible(true);
         }
     }
 }
