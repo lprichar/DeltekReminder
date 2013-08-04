@@ -10,11 +10,23 @@ namespace DeltekReminder.DesktopApp
     {
         private readonly DeltekReminderUiContext _ctx;
 
-        public Credentials()
+        public Credentials() : this(null)
+        {
+        }
+
+        public Credentials(string message)
         {
             InitializeComponent();
             _ctx = DeltekReminderUiContext.GetInstance();
             PopulateControlValuesFromSettings();
+            SetErrorMessage(message);
+        }
+
+        private void SetErrorMessage(string message)
+        {
+            ErrorMessage.Visibility = string.IsNullOrEmpty(message) ? Visibility.Collapsed : Visibility.Visible;
+            if (message != null)
+                ErrorMessage.Text = message;
         }
 
         private void PopulateControlValuesFromSettings()

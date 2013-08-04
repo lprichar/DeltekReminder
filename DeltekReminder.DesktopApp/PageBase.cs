@@ -11,10 +11,11 @@ namespace DeltekReminder.DesktopApp
             NavigationService.Navigate(ctx.NavigationHelper.StatusPage);
         }
 
-        protected void NavigateToCredentialsPage(DeltekReminderUiContext ctx)
+        protected void NavigateToCredentialsPage(DeltekReminderUiContext ctx, string message)
         {
             if (NavigationService == null) throw new NullReferenceException("NavigationService is null");
-            NavigationService.Navigate(ctx.NavigationHelper.CredentialsPage);
+            var credentialsPage = new Credentials(message);
+            NavigationService.Navigate(credentialsPage);
         }
 
         protected void SetStatus(string statusText)

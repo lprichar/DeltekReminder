@@ -26,14 +26,15 @@ namespace DeltekReminder.DesktopApp
         protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            if (_ctx.Settings.LastSuccessfulLogin.HasValue)
-            {
-                EnsureTimerExists();
-            }
-            else
+            var isLoggingInForFirstTime = !_ctx.Settings.LastSuccessfulLogin.HasValue;
+            if (isLoggingInForFirstTime)
             {
                 // login needs to occur in OnRender because it calls SetStatus which requires that the parent NavigationWindow's template has been rendered
                 Login();
+            }
+            else
+            {
+                EnsureTimerExists();
             }
             Databind();
         }
@@ -101,7 +102,15 @@ namespace DeltekReminder.DesktopApp
         private void OnGetTimesheetError(object sender, OnErrorArgs args)
         {
             SetStatus(null);
-            SetTrayAlert("The following error occurred getting the timesheet: " + args.Exception);
+            var hasEverLoggedInSuccessfully = _ctx.Settings.LastSuccessfulLogin.HasValue;
+            if (hasEverLoggedInSuccessfully)
+            {
+                MessageBox.Show("Error occurred retrieving timesheet.  Error: " + args.Exception.Message);
+            }
+            else
+            {
+                NavigateToCredentialsPage(_ctx, "Unexpected error occurred loggin in: " + args.Exception.Message);
+            }
         }
 
         private void OnNoActiveTimesheet(object sender, NoActiveTimesheetArgs args)
@@ -113,7 +122,7 @@ namespace DeltekReminder.DesktopApp
         private void LoginPageFailedLogin(object sender, FailedLoginArgs args)
         {
             SetStatus(null);
-            NavigateToCredentialsPage(_ctx);
+            NavigateToCredentialsPage(_ctx, "Login unsuccessful. Careful you don't get locked out.");
         }
 
         private DeltekPageBase[] _pages;
