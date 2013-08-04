@@ -10,7 +10,7 @@
 	Title="Status">
 
     <Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="280" Margin="0,0,0,10">
+        <StackPanel x:Name="StatusPanel" Orientation="Vertical" VerticalAlignment="Center" Width="280" Margin="0,0,0,10">
             <StackPanel>
                 <TextBlock FontWeight="Bold">Last checked:</TextBlock>
                 <StackPanel Orientation="Horizontal">

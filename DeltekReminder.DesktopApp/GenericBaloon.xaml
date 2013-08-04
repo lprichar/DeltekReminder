@@ -8,11 +8,12 @@
 
     <Border CornerRadius="4" BorderBrush="#555555" BorderThickness="0" Background="#FF0091BE" Width="275" Height="75">
         <Grid>
-            <Image HorizontalAlignment="Left" Width="30" Margin="20" Source="WhiteIcon.png"></Image>
-            <TextBlock x:Name="MessageText" VerticalAlignment="Center" TextAlignment="Center" Foreground="White" Text="{Binding Text, RelativeSource={RelativeSource Self}}" />
+            <Image HorizontalAlignment="Left" Width="30" Margin="20" Source="WhiteIcon.png" />
+            <TextBlock x:Name="MessageText" VerticalAlignment="Center" FontSize="14" TextAlignment="Center" Foreground="White" Text="No timesheet entered" />
             <Button Width="20" Height="20" Margin="10" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Close_Click">
                 <Image Source="Images/navigate_cross.png" Stretch="Fill" />
             </Button>
+            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"><Hyperlink FontSize="10" Foreground="White" Click="OpenTimesheet_Click">Open Timesheet</Hyperlink></TextBlock>
         </Grid>
     </Border>
 </UserControl>

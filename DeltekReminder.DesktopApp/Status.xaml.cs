@@ -170,5 +170,16 @@ namespace DeltekReminder.DesktopApp
             // todo: Implement actual checking
             SetTrayAlert("Checking now!");
         }
+
+        public void ShowBrowser()
+        {
+            ShowBrowser(true);
+        }
+
+        private void ShowBrowser(bool showBrowser)
+        {
+            StatusPanel.Visibility = showBrowser ? Visibility.Collapsed : Visibility.Visible;
+            Browser.Visibility = showBrowser ? Visibility.Visible : Visibility.Collapsed;
+        }
     }
 }

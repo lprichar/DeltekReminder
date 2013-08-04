@@ -3,7 +3,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -32,6 +31,10 @@ namespace DeltekReminder.DesktopApp
         private void SetWindowVisible(bool visible)
         {
             Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            if (visible)
+            {
+                Activate();
+            }
         }
 
         private Uri GetInitialPage()
@@ -48,8 +51,8 @@ namespace DeltekReminder.DesktopApp
             TaskbarIcon taskbarIcon = GetElementByName<TaskbarIcon>("TaskbarIcon");
             if (taskbarIcon.SupportsCustomToolTips)
             {
-                var baloon = new GenericBaloon();
-                baloon.Message = message;
+                var baloon = new GenericBaloon {Message = message};
+                baloon.OpenTimesheet += (sender, e) => OpenTimesheet(taskbarIcon);
                 taskbarIcon.ShowCustomBalloon(baloon, PopupAnimation.Fade, null);
             }
             else
@@ -57,7 +60,19 @@ namespace DeltekReminder.DesktopApp
                 taskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
             }
         }
-        
+
+        private void OpenTimesheet(TaskbarIcon taskbarIcon)
+        {
+            SetWindowVisible(true);
+            taskbarIcon.CloseBalloon();
+            var statusPage = NavigationService.Content as Status;
+            WindowState = WindowState.Maximized; // not a big fan of this, but Deltek seems to require a huge width and height in order to display well
+            if (statusPage != null)
+            {
+                statusPage.ShowBrowser();
+            }
+        }
+
         public void SetStatus(string statusText)
         {
             var showStatus = !string.IsNullOrEmpty(statusText);
