@@ -165,5 +165,10 @@ namespace DeltekReminder.DesktopApp
             OnNavigatedToNewPage(triggeredByIframeRefresh: true);
         }
 
+        private void CheckNow_Click(object sender, RoutedEventArgs e)
+        {
+            // todo: Implement actual checking
+            SetTrayAlert("Checking now!");
+        }
     }
 }

@@ -29,7 +29,6 @@
                             <MenuItem Header="Exit" Click="Exit_OnClick" />
                         </ContextMenu>
                     </tb:TaskbarIcon.ContextMenu>
-                    
                 </tb:TaskbarIcon>
 
                 <Grid Background="#FF0091BE" DockPanel.Dock="Top">

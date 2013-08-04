@@ -96,6 +96,9 @@
     <Compile Include="LoadingRectangle.xaml.cs">
       <DependentUpon>LoadingRectangle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GenericBaloon.xaml.cs">
+      <DependentUpon>GenericBaloon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NavigationHelper.cs" />
     <Compile Include="Pages\OnErrorArgs.cs" />
     <Compile Include="PageBase.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="Pages\FailedLoginArgs.cs" />
     <Compile Include="Pages\NoActiveTimesheetArgs.cs" />
     <Compile Include="Pages\SuccessfulLoginArgs.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Status.xaml.cs">
       <DependentUpon>Status.xaml</DependentUpon>
     </Compile>
@@ -125,6 +129,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Credentials.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GenericBaloon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="WhiteIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\navigate_cross.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

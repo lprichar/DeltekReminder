@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -44,10 +46,16 @@ namespace DeltekReminder.DesktopApp
         public void SetTrayAlert(string message)
         {
             TaskbarIcon taskbarIcon = GetElementByName<TaskbarIcon>("TaskbarIcon");
-            taskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
-
-            var toolTipText = string.IsNullOrEmpty(message) ? "Deltek Reminder" : message;
-            taskbarIcon.ToolTipText = toolTipText; // this is required, according to the documentation, for older operating systems that don't support rich ToolTips (XP/2003)
+            if (taskbarIcon.SupportsCustomToolTips)
+            {
+                var baloon = new GenericBaloon();
+                baloon.Message = message;
+                taskbarIcon.ShowCustomBalloon(baloon, PopupAnimation.Fade, null);
+            }
+            else
+            {
+                taskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
+            }
         }
         
         public void SetStatus(string statusText)
