@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,28 @@ namespace DeltekReminder.DesktopApp
             {
                 SetWindowVisible(false);
             }
+        }
+
+        private Version GetVersion()
+        {
+            if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
+            {
+                return System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion;
+            }
+            else
+            {
+                var executingAssembly = Assembly.GetExecutingAssembly();
+                var assemblyName = executingAssembly.GetName();
+                return assemblyName.Version;
+            }
+        }
+
+        protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+
+            var versionNumber = GetElementByName<TextBlock>("VersionLabel");
+            versionNumber.Text = GetVersion().ToString();
         }
 
         private void SetWindowVisible(bool visible)
