@@ -51,6 +51,7 @@
     <Compile Include="TimesheetDay.cs" />
     <Compile Include="TimesheetEntry.cs" />
     <Compile Include="TimesheetProject.cs" />
+    <Compile Include="TrippleDesStringEncryptor.cs" />
     <Compile Include="Utils\DateUtils.cs" />
     <Compile Include="Utils\UrlUtils.cs" />
   </ItemGroup>
