@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.Win32;
 
 namespace DeltekReminder.DesktopApp
 {
@@ -23,10 +24,25 @@ namespace DeltekReminder.DesktopApp
             InitializeComponent();
             _ctx = DeltekReminderUiContext.GetInstance();
             NavigationService.Navigate(GetInitialPage());
-            if (_ctx.Settings.LastSuccessfulLogin.HasValue)
+            var hasEverSuccessfullyLoggedIn = _ctx.Settings.LastSuccessfulLogin.HasValue;
+            if (hasEverSuccessfullyLoggedIn)
             {
                 SetWindowVisible(false);
             }
+            else
+            {
+                AddDeltekReminderToStartup();
+            }
+        }
+
+        private static void AddDeltekReminderToStartup()
+        {
+            if (!System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) return;
+
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+
+            string startPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Deltek Reminder\Deltek Reminder.appref-ms";
+            rkApp.SetValue("Deltek Reminder", startPath);
         }
 
         private Version GetVersion()
