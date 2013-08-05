@@ -1,26 +1,18 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace DeltekReminder.DesktopApp
 {
     public class PageBase : Page
     {
-        protected void NavigateToStatusPage(DeltekReminderUiContext ctx)
-        {
-            if (NavigationService == null) throw new NullReferenceException("NavigationService is null");
-            NavigationService.Navigate(ctx.NavigationHelper.StatusPage);
-        }
-
         protected void NavigateToCredentialsPage(DeltekReminderUiContext ctx, string message)
         {
-            if (NavigationService == null) throw new NullReferenceException("NavigationService is null");
-            var credentialsPage = new Credentials(message);
-            NavigationService.Navigate(credentialsPage);
+            ctx.NavigationHelper.ShowCredentialsPage(NavigationService, message);
         }
 
         protected void SetStatus(string statusText)
         {
             var parent = GetMainWindow();
+            if (parent == null) return;
             parent.SetStatus(statusText);
         }
 

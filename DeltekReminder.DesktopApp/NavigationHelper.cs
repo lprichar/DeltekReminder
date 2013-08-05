@@ -1,17 +1,29 @@
 ﻿using System;
+using System.Windows.Navigation;
 
 namespace DeltekReminder.DesktopApp
 {
     public class NavigationHelper
     {
-        public Uri StatusPage
+        public void ShowStatusPage(NavigationService navigationService, bool showBrowser)
         {
-            get { return new Uri("Status.xaml", UriKind.Relative); }
+            var statusPage = navigationService.Content as Status;
+            if (statusPage == null)
+            {
+                statusPage = new Status();
+                navigationService.Navigate(statusPage);
+            }
+            statusPage.ShowBrowser(showBrowser);
         }
 
-        public Uri CredentialsPage
+        public void ShowCredentialsPage(NavigationService navigationService, string message = null)
         {
-            get { return new Uri("Credentials.xaml", UriKind.Relative); }
+            var currentPage = navigationService.Content as Credentials;
+            if (currentPage == null)
+            {
+                currentPage = new Credentials(message);
+                navigationService.Navigate(currentPage);
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ namespace DeltekReminder.DesktopApp
         private void OnConnect_Click(object sender, RoutedEventArgs e)
         {
             SaveControlValuesIntoSettings();
-            NavigateToStatusPage(_ctx);
+            _ctx.NavigationHelper.ShowStatusPage(NavigationService, showBrowser: false);
         }
 
         private void SaveControlValuesIntoSettings()

@@ -23,7 +23,7 @@ namespace DeltekReminder.DesktopApp
         {
             InitializeComponent();
             _ctx = DeltekReminderUiContext.GetInstance();
-            NavigationService.Navigate(GetInitialPage());
+            NavigateToInitialPage();
             var hasEverSuccessfullyLoggedIn = _ctx.Settings.LastSuccessfulLogin.HasValue;
             if (hasEverSuccessfullyLoggedIn)
             {
@@ -51,12 +51,9 @@ namespace DeltekReminder.DesktopApp
             {
                 return System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion;
             }
-            else
-            {
-                var executingAssembly = Assembly.GetExecutingAssembly();
-                var assemblyName = executingAssembly.GetName();
-                return assemblyName.Version;
-            }
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var assemblyName = executingAssembly.GetName();
+            return assemblyName.Version;
         }
 
         protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
@@ -76,13 +73,16 @@ namespace DeltekReminder.DesktopApp
             }
         }
 
-        private Uri GetInitialPage()
+        private void NavigateToInitialPage()
         {
             if (_ctx.Settings.LastSuccessfulLogin.HasValue)
             {
-                return _ctx.NavigationHelper.StatusPage;
+                _ctx.NavigationHelper.ShowStatusPage(NavigationService, showBrowser: false);
             }
-            return _ctx.NavigationHelper.CredentialsPage;
+            else
+            {
+                _ctx.NavigationHelper.ShowCredentialsPage(NavigationService);
+            }
         }
 
         public void SetTrayAlert(string message)
@@ -104,12 +104,8 @@ namespace DeltekReminder.DesktopApp
         {
             SetWindowVisible(true);
             taskbarIcon.CloseBalloon();
-            var statusPage = NavigationService.Content as Status;
             WindowState = WindowState.Maximized; // not a big fan of this, but Deltek seems to require a huge width and height in order to display well
-            if (statusPage != null)
-            {
-                statusPage.ShowBrowser();
-            }
+            _ctx.NavigationHelper.ShowStatusPage(NavigationService, showBrowser: true);
         }
 
         public void SetStatus(string statusText)
@@ -185,6 +181,21 @@ namespace DeltekReminder.DesktopApp
         private void TaskbarIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
             SetWindowVisible(true);
+        }
+
+        private void Credentials_OnClick(object sender, RoutedEventArgs e)
+        {
+            _ctx.NavigationHelper.ShowCredentialsPage(NavigationService);
+        }
+
+        private void Status_OnClick(object sender, RoutedEventArgs e)
+        {
+            _ctx.NavigationHelper.ShowStatusPage(NavigationService, showBrowser: false);
+        }
+
+        private void Browser_OnClick(object sender, RoutedEventArgs e)
+        {
+            _ctx.NavigationHelper.ShowStatusPage(NavigationService, showBrowser: true);
         }
     }
 }

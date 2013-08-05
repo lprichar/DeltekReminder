@@ -36,6 +36,17 @@
                 </tb:TaskbarIcon>
 
                 <Grid Background="#FF0091BE" Grid.Row="0">
+                    <StackPanel Grid.Row="0" Height="20" VerticalAlignment="Top" Orientation="Horizontal">
+                        <Button Margin="5,0,0,0" HorizontalAlignment="Left" Width="20" Height="20" Background="Transparent" BorderThickness="0" Click="Credentials_OnClick">
+                            <Image Source="Images\key.png" Stretch="None" />
+                        </Button>
+                        <Button Margin="5,0,0,0" Width="20" Height="20" Background="Transparent" BorderThickness="0" Click="Status_OnClick">
+                            <Image Source="Images\information.png" Stretch="None" />
+                        </Button>
+                        <Button Margin="5,0,0,0" HorizontalAlignment="Left" Width="20" Height="20" Background="Transparent" BorderThickness="0" Click="Browser_OnClick">
+                            <Image Source="Images\clock.png" Stretch="None" />
+                        </Button>
+                    </StackPanel>
                     <Grid Visibility="Collapsed" Width="200" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0" Height="3" Name="LoadingAnimation">
                         <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.0" />
                         <local:LoadingRectangle Width="300" Height="3" OffsetSeconds="0.2" />
@@ -45,7 +56,7 @@
                     </Grid>
                     <TextBlock Visibility="Collapsed" FontSize="10" Name="StatusText" HorizontalAlignment="Right" Margin="0,6,10,0" Foreground="White">Logging In...</TextBlock>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="10">
-                        <Image Source="WhiteIcon.png" Height="30" Stretch="Fill" Margin="0,0,10,0"/>
+                        <Image Source="WhiteIcon.png" Height="35" Stretch="Fill" Margin="0,0,10,0"/>
                         <TextBlock FontSize="25" Height="30" Foreground="White">Deltek Reminder</TextBlock>
                     </StackPanel>
                 </Grid>
