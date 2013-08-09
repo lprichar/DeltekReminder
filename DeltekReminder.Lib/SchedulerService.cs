@@ -30,7 +30,8 @@ namespace DeltekReminder.Lib
 
         public DateTime GetNextTimeToCheckDeltek(DeltekReminderContext ctx)
         {
-            var todayAtCheckTime = new DateTime(ctx.Now.Year, ctx.Now.Month, ctx.Now.Day, 17, 0, 0);
+            var checkTime = DateTime.Parse(ctx.Settings.CheckTime);
+            var todayAtCheckTime = new DateTime(ctx.Now.Year, ctx.Now.Month, ctx.Now.Day, checkTime.Hour, checkTime.Minute, 0);
             if (todayAtCheckTime > ctx.Now) return todayAtCheckTime;
             return todayAtCheckTime.AddDays(1);
         }

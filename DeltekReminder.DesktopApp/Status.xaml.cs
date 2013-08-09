@@ -188,7 +188,7 @@ namespace DeltekReminder.DesktopApp
             StatusPanel.Visibility = showBrowser ? Visibility.Collapsed : Visibility.Visible;
             Browser.Visibility = showBrowser ? Visibility.Visible : Visibility.Collapsed;
             var browserIsEmpty = Browser.Document == null || ((HTMLDocument) Browser.Document).url == null;
-            if (browserIsEmpty)
+            if (browserIsEmpty && showBrowser)
             {
                 Login();
             }
