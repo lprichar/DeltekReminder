@@ -23,7 +23,7 @@ namespace DeltekReminder.DesktopApp
             Browser.LoadCompleted += Browser_LoadCompleted;
             _ctx = DeltekReminderUiContext.GetInstance();
             
-            _statusViewModel = new StatusViewModel();
+            _statusViewModel = new StatusViewModel(_ctx);
             DataContext = _statusViewModel;
         }
 

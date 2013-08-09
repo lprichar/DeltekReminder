@@ -9,35 +9,37 @@ namespace DeltekReminder.DesktopApp
 {
     public class StatusViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<CheckTime> _checkTimes;
-        private CheckTime _selectedCheckTime;
+        private ObservableCollection<string> _checkTimes;
+        private string _selectedCheckTime;
         private Visibility _nextCheckTextBlockVisible;
         private Visibility _nextCheckComboBoxVisible;
         private string _nextCheckDay;
         private bool _nextCheckComboBoxOpen;
+        private DeltekReminderUiContext _ctx;
 
-        public StatusViewModel()
+        public StatusViewModel(DeltekReminderUiContext ctx)
         {
-            CheckTimes = new ObservableCollection<CheckTime>
+            _ctx = ctx;
+            CheckTimes = new ObservableCollection<string>
                 {
-                    new CheckTime { TextValue = "4:00 PM" },
-                    new CheckTime { TextValue = "4:15 PM" },
-                    new CheckTime { TextValue = "4:30 PM" },
-                    new CheckTime { TextValue = "4:45 PM" },
-                    new CheckTime { TextValue = "5:00 PM" },
-                    new CheckTime { TextValue = "5:15 PM" },
-                    new CheckTime { TextValue = "5:30 PM" },
-                    new CheckTime { TextValue = "5:45 PM" },
-                    new CheckTime { TextValue = "6:00 PM" },
-                    new CheckTime { TextValue = "6:15 PM" },
-                    new CheckTime { TextValue = "6:30 PM" },
+                    "4:00 PM",
+                    "4:15 PM",
+                    "4:30 PM",
+                    "4:45 PM",
+                    "5:00 PM",
+                    "5:15 PM",
+                    "5:30 PM",
+                    "5:45 PM",
+                    "6:00 PM",
+                    "6:15 PM",
+                    "6:30 PM",
                 };
-            SelectedCheckTime = CheckTimes.Single(i => i.TextValue == "5:00 PM");
+            SelectedCheckTime = CheckTimes.Single(i => i == ctx.Settings.CheckTime);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableCollection<CheckTime> CheckTimes
+        public ObservableCollection<string> CheckTimes
         {
             get { return _checkTimes; }
             set
@@ -57,13 +59,14 @@ namespace DeltekReminder.DesktopApp
             }
         }
 
-        public CheckTime SelectedCheckTime
+        public string SelectedCheckTime
         {
             get { return _selectedCheckTime; }
             set
             {
                 _selectedCheckTime = value;
                 SetNextCheckTimeEditable(false);
+                _ctx.Settings.SetCheckTime(value);
                 OnPropertyChanged();
             }
         }

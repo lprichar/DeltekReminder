@@ -8,6 +8,11 @@ namespace DeltekReminder.Lib
     [Serializable]
     public class DeltekReminderSettings
     {
+        public DeltekReminderSettings()
+        {
+            CheckTime = "5:00 PM";
+        }
+        
         private readonly object _lock = new object();
         private const string SETTINGS_CONFIG = @"Settings.config";
 
@@ -27,6 +32,8 @@ namespace DeltekReminder.Lib
             get { return new TripleDesStringEncryptor().DecryptString(EncryptedPassword); }
             set { EncryptedPassword = new TripleDesStringEncryptor().EncryptString(value); }
         }
+
+        public string CheckTime { get; set; }
 
         private static string GetConfigFileName()
         {
@@ -112,6 +119,15 @@ namespace DeltekReminder.Lib
         {
             if (LastSuccessfulLogin == null) return null;
             return LastSuccessfulLogin.Value.ToLongDateString() + " " + LastSuccessfulLogin.Value.ToLongTimeString();
+        }
+
+        public void SetCheckTime(string value)
+        {
+            if (CheckTime != value)
+            {
+                CheckTime = value;
+                Save();
+            }
         }
     }
 }

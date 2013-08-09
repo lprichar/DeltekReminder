@@ -26,10 +26,10 @@
                     <TextBlock Text="{Binding NextCheckDay}" Margin="0,0,5,0" />
                     <TextBlock Visibility="{Binding NextCheckTextBlockVisible}">
                         <Hyperlink Click="NextCheckTime_Click">
-                            <TextBlock Text="{Binding Path=SelectedCheckTime.TextValue, Mode=OneWay}" />
+                            <TextBlock Text="{Binding Path=SelectedCheckTime, Mode=OneWay}" />
                         </Hyperlink>
                     </TextBlock>
-                    <ComboBox IsDropDownOpen="{Binding NextCheckComboBoxOpen}" Visibility="{Binding NextCheckComboBoxVisible}" ItemsSource="{Binding CheckTimes}" SelectedValue="{Binding SelectedCheckTime}" DisplayMemberPath="TextValue" />
+                    <ComboBox IsDropDownOpen="{Binding NextCheckComboBoxOpen}" Visibility="{Binding NextCheckComboBoxVisible}" ItemsSource="{Binding CheckTimes}" SelectedValue="{Binding SelectedCheckTime}" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>
