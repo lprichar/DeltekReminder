@@ -132,6 +132,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CheckTime.cs" />
     <Compile Include="DeltekReminderUiContext.cs" />
     <Compile Include="DhtmlEventHandler.cs" />
     <Compile Include="Credentials.xaml.cs">
@@ -155,6 +156,7 @@
     <Compile Include="Status.xaml.cs">
       <DependentUpon>Status.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StatusViewModel.cs" />
     <Page Include="LoadingRectangle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

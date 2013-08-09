@@ -15,12 +15,16 @@ namespace DeltekReminder.DesktopApp
     public partial class Status
     {
         private readonly DeltekReminderUiContext _ctx;
+        private readonly StatusViewModel _statusViewModel;
 
         public Status()
         {
             InitializeComponent();
             Browser.LoadCompleted += Browser_LoadCompleted;
             _ctx = DeltekReminderUiContext.GetInstance();
+            
+            _statusViewModel = new StatusViewModel();
+            DataContext = _statusViewModel;
         }
 
         protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
@@ -48,8 +52,7 @@ namespace DeltekReminder.DesktopApp
         private void Databind()
         {
             LastSuccessfulDeltekCheck.Text = _ctx.Settings.GetLastStatusAsText();
-            NextCheckTime.Text = _ctx.SchedulerService.GetNextTimeToCheckAsText();
-            NextCheckDay.Text = _ctx.SchedulerService.GetNextDayToCheckAsText();
+            _statusViewModel.NextCheckDay = _ctx.SchedulerService.GetNextDayToCheckAsText();
         }
 
         private void OnTimeToCheckDeltek(object state)
@@ -193,7 +196,7 @@ namespace DeltekReminder.DesktopApp
 
         private void NextCheckTime_Click(object sender, RoutedEventArgs e)
         {
-            
+            _statusViewModel.SetNextCheckTimeEditable(true);
         }
     }
 }
