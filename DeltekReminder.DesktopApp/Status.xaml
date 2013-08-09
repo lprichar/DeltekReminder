@@ -14,13 +14,17 @@
             <StackPanel>
                 <TextBlock FontWeight="Bold">Last checked:</TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="LastSuccessfulDeltekCheck">Tuesday August /1/2013 12:35:35 PM </TextBlock>
+                    <TextBlock x:Name="LastSuccessfulDeltekCheck">Tuesday August 1, 2013 12:35:35 PM</TextBlock>
                     <TextBlock Margin="5,0,0,0"><Hyperlink Click="CheckNow_Click">Check now</Hyperlink></TextBlock>
                 </StackPanel>
             </StackPanel>
             <StackPanel Margin="0,10,0,0">
                 <TextBlock FontWeight="Bold">Next Check:</TextBlock>
-                <TextBlock x:Name="NextCheck">1/1/2013</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="NextCheckDay">Tuesday August 1, 2013</TextBlock>
+                    <TextBlock> </TextBlock>
+                    <TextBlock><Hyperlink Click="NextCheckTime_Click"><TextBlock x:Name="NextCheckTime">12:35:35 PM</TextBlock></Hyperlink></TextBlock>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
         <WebBrowser Visibility="Collapsed" Name="Browser"/>

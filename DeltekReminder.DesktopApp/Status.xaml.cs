@@ -48,7 +48,8 @@ namespace DeltekReminder.DesktopApp
         private void Databind()
         {
             LastSuccessfulDeltekCheck.Text = _ctx.Settings.GetLastStatusAsText();
-            NextCheck.Text = _ctx.SchedulerService.GetNextTimeToCheckAsText();
+            NextCheckTime.Text = _ctx.SchedulerService.GetNextTimeToCheckAsText();
+            NextCheckDay.Text = _ctx.SchedulerService.GetNextDayToCheckAsText();
         }
 
         private void OnTimeToCheckDeltek(object state)
@@ -188,6 +189,11 @@ namespace DeltekReminder.DesktopApp
             {
                 Login();
             }
+        }
+
+        private void NextCheckTime_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

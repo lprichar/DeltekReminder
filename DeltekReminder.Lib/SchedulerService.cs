@@ -38,7 +38,13 @@ namespace DeltekReminder.Lib
         public string GetNextTimeToCheckAsText()
         {
             if (_timer == null || _nextCheck == null) return "";
-            return _nextCheck.Value.ToLongDateString() + " " + _nextCheck.Value.ToLongTimeString();
+            return _nextCheck.Value.ToLongTimeString();
+        }
+        
+        public string GetNextDayToCheckAsText()
+        {
+            if (_timer == null || _nextCheck == null) return "";
+            return _nextCheck.Value.ToLongDateString();
         }
     }
 }
