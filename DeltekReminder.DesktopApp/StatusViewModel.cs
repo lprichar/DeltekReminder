@@ -15,7 +15,14 @@ namespace DeltekReminder.DesktopApp
         private Visibility _nextCheckComboBoxVisible;
         private string _nextCheckDay;
         private bool _nextCheckComboBoxOpen;
-        private DeltekReminderUiContext _ctx;
+        private readonly DeltekReminderUiContext _ctx;
+        public event CheckTimeChanged CheckTimeChanged;
+
+        protected virtual void InvokeCheckTimeChanged(string value)
+        {
+            var handler = CheckTimeChanged;
+            if (handler != null) handler(this, new CheckTimeChangedArgs { NewCheckTime = value });
+        }
 
         public StatusViewModel(DeltekReminderUiContext ctx)
         {
@@ -66,7 +73,10 @@ namespace DeltekReminder.DesktopApp
             {
                 _selectedCheckTime = value;
                 SetNextCheckTimeEditable(false);
-                _ctx.Settings.SetCheckTime(value);
+                if (_ctx.Settings.CheckTime != value)
+                {
+                    InvokeCheckTimeChanged(value);
+                };
                 OnPropertyChanged();
             }
         }
@@ -114,5 +124,12 @@ namespace DeltekReminder.DesktopApp
             NextCheckTextBlockVisible = isEditable ? Visibility.Collapsed : Visibility.Visible;
             NextCheckComboBoxOpen = isEditable;
         }
+    }
+
+    public delegate void CheckTimeChanged(object sender, CheckTimeChangedArgs args);
+
+    public class CheckTimeChangedArgs
+    {
+        public string NewCheckTime { get; set; }
     }
 }

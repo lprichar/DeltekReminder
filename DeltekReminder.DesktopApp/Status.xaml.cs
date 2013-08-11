@@ -24,7 +24,14 @@ namespace DeltekReminder.DesktopApp
             _ctx = DeltekReminderUiContext.GetInstance();
             
             _statusViewModel = new StatusViewModel(_ctx);
+            _statusViewModel.CheckTimeChanged += StatusViewModelOnCheckTimeChanged;
             DataContext = _statusViewModel;
+        }
+
+        private void StatusViewModelOnCheckTimeChanged(object sender, CheckTimeChangedArgs args)
+        {
+            _ctx.Settings.SetCheckTime(args.NewCheckTime);
+            ResetTimer();
         }
 
         protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
@@ -140,9 +147,14 @@ namespace DeltekReminder.DesktopApp
             }
             else
             {
-                _ctx.SchedulerService.ResetTimer(_ctx, OnTimeToCheckDeltek);
-                Databind();
+                ResetTimer();
             }
+        }
+
+        private void ResetTimer()
+        {
+            _ctx.SchedulerService.ResetTimer(_ctx, OnTimeToCheckDeltek);
+            Databind();
         }
 
         private void Browser_LoadCompleted(object sender, NavigationEventArgs args)
