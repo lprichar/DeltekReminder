@@ -11,7 +11,7 @@ namespace DeltekReminder.Lib
     {
         static MyLogManager()
         {
-            var fileInfo = new FileInfo("DeltekReminder.exe.config");
+            var fileInfo = new FileInfo("DeltekReminder.DesktopApp.exe.config");
             if (fileInfo.Exists)
             {
                 XmlConfigurator.Configure(fileInfo);
