@@ -45,23 +45,12 @@ namespace DeltekReminder.DesktopApp
             rkApp.SetValue("Deltek Reminder", startPath);
         }
 
-        private Version GetVersion()
-        {
-            if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
-            {
-                return System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion;
-            }
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            var assemblyName = executingAssembly.GetName();
-            return assemblyName.Version;
-        }
-
         protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
 
             var versionNumber = GetElementByName<TextBlock>("VersionLabel");
-            versionNumber.Text = GetVersion().ToString();
+            versionNumber.Text = _ctx.NavigationHelper.GetVersion().ToString();
         }
 
         private void SetWindowVisible(bool visible)

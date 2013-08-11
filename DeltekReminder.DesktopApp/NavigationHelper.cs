@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Navigation;
 
 namespace DeltekReminder.DesktopApp
@@ -24,6 +25,17 @@ namespace DeltekReminder.DesktopApp
                 currentPage = new Credentials(message);
                 navigationService.Navigate(currentPage);
             }
+        }
+
+        public Version GetVersion()
+        {
+            if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
+            {
+                return System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion;
+            }
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var assemblyName = executingAssembly.GetName();
+            return assemblyName.Version;
         }
     }
 }

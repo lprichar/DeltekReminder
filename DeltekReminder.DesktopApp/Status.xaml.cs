@@ -124,10 +124,12 @@ namespace DeltekReminder.DesktopApp
         private void OnGetTimesheetError(object sender, OnErrorArgs args)
         {
             SetStatus(null);
+            _log.Error("Error retrieving timesheet", args.Exception);
             var hasEverLoggedInSuccessfully = _ctx.Settings.LastSuccessfulLogin.HasValue;
             if (hasEverLoggedInSuccessfully)
             {
-                MessageBox.Show("Error occurred retrieving timesheet.  Error: " + args.Exception.Message);
+                SendErrorReport sendErrorReport = new SendErrorReport(_ctx, args.Exception);
+                sendErrorReport.ShowDialog();
             }
             else
             {
@@ -213,7 +215,7 @@ namespace DeltekReminder.DesktopApp
         private void CheckNow_Click(object sender, RoutedEventArgs e)
         {
             Login();
-            
+
             // reset the timer during check now as a way to reset a timer that's gotten out of sync for whatever reason
             ResetTimer();
         }

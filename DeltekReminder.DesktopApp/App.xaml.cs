@@ -1,16 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows.Threading;
+using DeltekReminder.Lib;
+using log4net;
 
 namespace DeltekReminder.DesktopApp
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
+        private static readonly ILog _log = MyLogManager.GetLogger(typeof(App));
+
+        public App()
+        {
+            Dispatcher.UnhandledException += App_UnhandledException;
+        }
+
+        private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            _log.Error("Unhandled global error", e.Exception);
+            var ctx = DeltekReminderUiContext.GetInstance();
+            SendErrorReport sendErrorReport = new SendErrorReport(ctx, e.Exception);
+            sendErrorReport.ShowDialog();
+            e.Handled = true;
+        }
     }
 }
