@@ -7,6 +7,11 @@
             <Setter Property="Background" Value="#606A74" />
             <Setter Property="Foreground" Value="White" />
         </Style>
+        <Style x:Key="IconButton" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+        </Style>
     </Application.Resources>
 
 </Application>

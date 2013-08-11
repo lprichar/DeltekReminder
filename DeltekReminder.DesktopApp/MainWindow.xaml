@@ -37,13 +37,13 @@
 
                 <Grid Background="#FF0091BE" Grid.Row="0">
                     <StackPanel Grid.Row="0" Height="20" VerticalAlignment="Top" Orientation="Horizontal">
-                        <Button Margin="5,0,0,0" HorizontalAlignment="Left" Width="20" Height="20" Background="Transparent" BorderThickness="0" Click="Credentials_OnClick">
+                        <Button Margin="5,0,0,0" HorizontalAlignment="Left" Width="20" Style="{StaticResource IconButton}" Height="20" Click="Credentials_OnClick">
                             <Image Source="Images\key.png" Stretch="None" />
                         </Button>
-                        <Button Margin="5,0,0,0" Width="20" Height="20" Background="Transparent" BorderThickness="0" Click="Status_OnClick">
+                        <Button Margin="5,0,0,0" Width="20" Height="20" Style="{StaticResource IconButton}"  Click="Status_OnClick">
                             <Image Source="Images\information.png" Stretch="None" />
                         </Button>
-                        <Button Margin="5,0,0,0" HorizontalAlignment="Left" Width="20" Height="20" Background="Transparent" BorderThickness="0" Click="Browser_OnClick">
+                        <Button Margin="5,0,0,0" HorizontalAlignment="Left" Width="20" Height="20" Style="{StaticResource IconButton}" Click="Browser_OnClick">
                             <Image Source="Images\clock.png" Stretch="None" />
                         </Button>
                     </StackPanel>
