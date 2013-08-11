@@ -39,7 +39,7 @@ namespace DeltekReminder.DesktopApp.Pages
             var openTimesheet = unitFrameDocument.getElementsByTagName("tr")
                 .Cast<IHTMLElement>()
                 .Where(i => i.className == "notSelected")
-                .FirstOrDefault(i => i.innerText.Contains("Open"));
+                .LastOrDefault(i => i.innerText.Contains("Open")); // note: LastOrDefault implicitly assumes open timesheets are in reverse chronological order
 
             if (openTimesheet == null)
             {
