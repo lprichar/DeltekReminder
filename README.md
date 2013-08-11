@@ -22,9 +22,10 @@ Release Notes
 1.0.0.11 - Aug 11, 2013
 -------------
 
+* New Feature: Global error handling
 * Fixed: Fail silently if the internet is unavailable
 * Fixed: When users changed the time to check it wasn't immediatly using the new time, it is now
-* Fixed: If there were multiple open timesheets it was using the the furthest in the future, it now uses the closest
+* Fixed: If there were multiple open timesheets it was using the furthest in the future, it now uses the closest
 * Fixed: If I wasn't logged in at 5pm then it was telling me in the next morning that I haven't filled out my timesheet for the new day
 * Fixed: If it missed the time it was supposed to check (another bug) then when I click "check now" it should recalculate the next check
 * Minor UI updates
