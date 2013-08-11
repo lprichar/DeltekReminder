@@ -103,6 +103,9 @@
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
       <HintPath>..\packages\Hardcodet.Wpf.TaskbarNotification.1.0.4.0\lib\net40\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>

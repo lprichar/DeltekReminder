@@ -5,6 +5,7 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using DeltekReminder.DesktopApp.Pages;
 using DeltekReminder.Lib;
+using log4net;
 using mshtml;
 
 namespace DeltekReminder.DesktopApp
@@ -16,16 +17,24 @@ namespace DeltekReminder.DesktopApp
     {
         private readonly DeltekReminderUiContext _ctx;
         private readonly StatusViewModel _statusViewModel;
+        private static readonly ILog _log = MyLogManager.GetLogger(typeof(Status));
 
         public Status()
         {
             InitializeComponent();
             Browser.LoadCompleted += Browser_LoadCompleted;
+
             _ctx = DeltekReminderUiContext.GetInstance();
             
             _statusViewModel = new StatusViewModel(_ctx);
             _statusViewModel.CheckTimeChanged += StatusViewModelOnCheckTimeChanged;
             DataContext = _statusViewModel;
+        }
+
+        private void BrowserTimedOut()
+        {
+            SetStatus(null);
+            _log.Error("Browser timed out");
         }
 
         private void StatusViewModelOnCheckTimeChanged(object sender, CheckTimeChangedArgs args)
@@ -87,6 +96,8 @@ namespace DeltekReminder.DesktopApp
 
         private void Login()
         {
+            _log.Debug("Attempting to check status");
+            
             SetStatus("Logging in...");
             var loginPageUri = UrlUtils.GetLoginPage(_ctx.Settings.BaseUrl);
 
@@ -167,6 +178,14 @@ namespace DeltekReminder.DesktopApp
         {
             var document = (HTMLDocument)Browser.Document;
             var uri = new Uri(document.url);
+
+            var navigationError = uri.ToString().StartsWith("res://ieframe.dll");
+            if (navigationError)
+            {
+                BrowserTimedOut();
+                return;
+            }
+
             var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, triggeredByIframeRefresh));
             if (currentPage != null)
             {

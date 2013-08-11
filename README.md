@@ -6,9 +6,10 @@ Reminds you to fill in your timesheet daily
 Features:
 -------------
 
-* Configurable time to remind you
-* Won't bother you if you're already entered your time
-* One click to open your currently active timesheet (no logging in, etc)
+* One click to open active timesheet (no logging in)
+* Configurable reminder time
+* Close reminder to sleep 15 minutes
+* No reminder if you're already entered time
 
 Installation
 -------------
@@ -21,8 +22,7 @@ Release Notes
 1.0.0.11 - Aug 11, 2013
 -------------
 
-
-
+* Fixed: Fail silently if the internet is unavailable
 * Fixed: When users changed the time to check it wasn't immediatly using the new time, it is now
 * Fixed: If there were multiple open timesheets it was using the the furthest in the future, it now uses the closest
 * Fixed: If I wasn't logged in at 5pm then it was telling me in the next morning that I haven't filled out my timesheet for the new day
