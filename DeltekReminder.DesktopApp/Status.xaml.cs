@@ -194,6 +194,9 @@ namespace DeltekReminder.DesktopApp
         private void CheckNow_Click(object sender, RoutedEventArgs e)
         {
             Login();
+            
+            // reset the timer during check now as a way to reset a timer that's gotten out of sync for whatever reason
+            ResetTimer();
         }
 
         public void ShowBrowser(bool showBrowser)
