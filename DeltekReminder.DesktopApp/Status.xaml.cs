@@ -140,8 +140,9 @@ namespace DeltekReminder.DesktopApp
 
         private void TimesheetPageFoundTimesheet(object sender, FoundTimesheetArgs args)
         {
-            SetStatus(null); 
-            if (args.Timesheet.IsMissingTimeForToday(_ctx))
+            SetStatus(null);
+            var shouldShowAlert = _ctx.SchedulerService.ShouldShowAlert(_ctx, args.Timesheet);
+            if (shouldShowAlert)
             {
                 SetTrayAlert("Missing timesheet for today!");
             }

@@ -30,8 +30,7 @@ namespace DeltekReminder.Lib
 
         public DateTime GetNextTimeToCheckDeltek(DeltekReminderContext ctx)
         {
-            var checkTime = DateTime.Parse(ctx.Settings.CheckTime);
-            var todayAtCheckTime = new DateTime(ctx.Now.Year, ctx.Now.Month, ctx.Now.Day, checkTime.Hour, checkTime.Minute, 0);
+            var todayAtCheckTime = ctx.Settings.GetCheckTimeForToday(ctx);
             if (todayAtCheckTime > ctx.Now) return todayAtCheckTime;
             return todayAtCheckTime.AddDays(1);
         }
@@ -46,6 +45,13 @@ namespace DeltekReminder.Lib
         {
             if (_timer == null || _nextCheck == null) return "";
             return _nextCheck.Value.ToLongDateString();
+        }
+
+        public bool ShouldShowAlert(DeltekReminderContext ctx, Timesheet timesheet)
+        {
+            var isBeforeCheckTime = ctx.Now < ctx.Settings.GetCheckTimeForToday(ctx);
+            if (isBeforeCheckTime) return false;
+            return timesheet.IsMissingTimeForToday(ctx);
         }
     }
 }

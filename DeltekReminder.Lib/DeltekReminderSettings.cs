@@ -129,5 +129,12 @@ namespace DeltekReminder.Lib
                 Save();
             }
         }
+
+        public DateTime GetCheckTimeForToday(DeltekReminderContext ctx)
+        {
+            var checkTime = DateTime.Parse(ctx.Settings.CheckTime);
+            var todayAtCheckTime = new DateTime(ctx.Now.Year, ctx.Now.Month, ctx.Now.Day, checkTime.Hour, checkTime.Minute, 0);
+            return todayAtCheckTime;
+        }
     }
 }
