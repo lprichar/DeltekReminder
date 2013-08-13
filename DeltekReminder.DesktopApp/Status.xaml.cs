@@ -78,6 +78,8 @@ namespace DeltekReminder.DesktopApp
 
         private void SuccessfulLogin(object sender, SuccessfulLoginArgs args)
         {
+            if (!IsPerformingAsyncOperation()) return;
+            
             _ctx.Settings.LastSuccessfulLogin = _ctx.Now;
             _ctx.Settings.Save();
             var thisIsTheFirstSuccessfulLogin = !_ctx.Settings.LastSuccessfulLogin.HasValue;
@@ -153,6 +155,8 @@ namespace DeltekReminder.DesktopApp
 
         private void TimesheetPageFoundTimesheet(object sender, FoundTimesheetArgs args)
         {
+            if (!IsPerformingAsyncOperation()) return;
+            
             SetStatus(null);
             var shouldShowAlert = _ctx.SchedulerService.ShouldShowAlert(_ctx, args.Timesheet);
             if (shouldShowAlert)
@@ -173,10 +177,10 @@ namespace DeltekReminder.DesktopApp
 
         private void Browser_LoadCompleted(object sender, NavigationEventArgs args)
         {
-            OnNavigatedToNewPage(triggeredByIframeRefresh: false);
+            OnNavigatedToNewPage();
         }
 
-        private void OnNavigatedToNewPage(bool triggeredByIframeRefresh)
+        private void OnNavigatedToNewPage()
         {
             var document = (HTMLDocument)Browser.Document;
             var uri = new Uri(document.url);
@@ -188,7 +192,7 @@ namespace DeltekReminder.DesktopApp
                 return;
             }
 
-            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, Browser, triggeredByIframeRefresh));
+            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, Browser));
             if (currentPage != null)
             {
                 if (currentPage is HomePage)
@@ -209,7 +213,7 @@ namespace DeltekReminder.DesktopApp
 
         public void DocumentOnActivate(IHTMLEventObj evo)
         {
-            OnNavigatedToNewPage(triggeredByIframeRefresh: true);
+            OnNavigatedToNewPage();
         }
 
         private void CheckNow_Click(object sender, RoutedEventArgs e)

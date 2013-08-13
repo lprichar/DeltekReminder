@@ -18,6 +18,7 @@ namespace DeltekReminder.DesktopApp
     public partial class MainWindow
     {
         private readonly DeltekReminderUiContext _ctx;
+        private FrameworkElement _loadingAnimation;
 
         public MainWindow()
         {
@@ -100,12 +101,21 @@ namespace DeltekReminder.DesktopApp
         public void SetStatus(string statusText)
         {
             var showStatus = !string.IsNullOrEmpty(statusText);
-            var loadingAnimation = GetElementByName<FrameworkElement>("LoadingAnimation");
             var statusTextElement = GetElementByName<TextBlock>("StatusText");
-            SetVisible(loadingAnimation, showStatus);
+            SetVisible(LoadingAnimation, showStatus);
             SetVisible(statusTextElement, showStatus);
             if (statusText != null)
                 statusTextElement.Text = statusText;
+        }
+
+        private FrameworkElement LoadingAnimation
+        {
+            get { return _loadingAnimation ?? (_loadingAnimation = GetElementByName<FrameworkElement>("LoadingAnimation")); }
+        }
+
+        public bool IsLoadingAnimationVisible()
+        {
+            return LoadingAnimation.Visibility == Visibility.Visible;
         }
 
         public void SetVisible(FrameworkElement element, bool visible)

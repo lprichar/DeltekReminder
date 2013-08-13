@@ -16,6 +16,13 @@ namespace DeltekReminder.DesktopApp
             parent.SetStatus(statusText);
         }
 
+        protected bool IsPerformingAsyncOperation()
+        {
+            var parent = GetMainWindow();
+            if (parent == null) return false;
+            return parent.IsLoadingAnimationVisible();
+        }
+
         private MainWindow GetMainWindow()
         {
             return Parent as MainWindow;
@@ -26,6 +33,7 @@ namespace DeltekReminder.DesktopApp
             var parent = GetMainWindow();
             parent.SetTrayAlert(message);
         }
+
     }
 
 }

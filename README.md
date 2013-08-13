@@ -19,6 +19,13 @@ Installation
 Release Notes
 ==============
 
+1.0.0.12 - Aug 12, 2013
+-------------
+
+* Fixed: If you navigated to a different page (e.g. expenses) the app was getting a null 
+reference exception (b/c it incorrectly thought it was on the home page)
+* Fixed: If you manually navigated to the home page the app displays the loading animation indefinitely
+
 1.0.0.11 - Aug 11, 2013
 -------------
 

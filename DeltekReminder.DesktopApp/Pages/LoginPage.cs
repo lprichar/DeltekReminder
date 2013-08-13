@@ -16,7 +16,7 @@ namespace DeltekReminder.DesktopApp.Pages
             if (handler != null) handler(this, new FailedLoginArgs());
         }
 
-        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser, bool triggeredByIframeRefresh)
+        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser)
         {
             return uri == UrlUtils.GetLoginPage(ctx.Settings.BaseUrl);
         }

@@ -23,7 +23,7 @@ namespace DeltekReminder.DesktopApp.Pages
             if (handler != null) handler(this, args);
         }
 
-        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser, bool triggeredByIframeRefresh)
+        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser)
         {
             if (!UrlUtils.OnTimeCollectionPage(uri)) return false;
 
