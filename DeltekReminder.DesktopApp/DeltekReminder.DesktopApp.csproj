@@ -166,6 +166,9 @@
       <DependentUpon>Status.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatusViewModel.cs" />
+    <Compile Include="TimePickerBaloon.xaml.cs">
+      <DependentUpon>TimePickerBaloon.xaml</DependentUpon>
+    </Compile>
     <Page Include="LoadingRectangle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -197,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Status.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TimePickerBaloon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

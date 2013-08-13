@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="DeltekReminder.DesktopApp.TimePickerBaloon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="275">
+    <Border CornerRadius="4" BorderBrush="#555555" BorderThickness="0" Background="#FF0091BE" Width="275" Height="75">
+        <Grid>
+            <TextBlock Foreground="White" TextAlignment="Center" Margin="5">Pick Your Hours</TextBlock>
+            <TextBlock Foreground="White" TextAlignment="Center" FontSize="18" Margin="0,10,0,0" VerticalAlignment="Center">7 | 8 | 9</TextBlock>
+        </Grid>
+    </Border>
+</UserControl>

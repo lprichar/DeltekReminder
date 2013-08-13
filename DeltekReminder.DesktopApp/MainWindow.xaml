@@ -26,8 +26,14 @@
                     Name="TaskbarIcon"
                     IconSource="DeltekReminder.ico"
                     ToolTipText="Deltek Reminder"
-                    TrayMouseDoubleClick="TaskbarIcon_OnTrayMouseDoubleClick">
+                    TrayMouseDoubleClick="TaskbarIcon_OnTrayMouseDoubleClick"
+                    PopupActivation="LeftClick"
+                    >
 
+                    <tb:TaskbarIcon.TrayPopup>
+                        <local:TimePickerBaloon />
+                    </tb:TaskbarIcon.TrayPopup>
+                    
                     <tb:TaskbarIcon.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Exit" Click="Exit_OnClick" />
