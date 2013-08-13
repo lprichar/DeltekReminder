@@ -188,7 +188,7 @@ namespace DeltekReminder.DesktopApp
                 return;
             }
 
-            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, triggeredByIframeRefresh));
+            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, Browser, triggeredByIframeRefresh));
             if (currentPage != null)
             {
                 if (currentPage is HomePage)

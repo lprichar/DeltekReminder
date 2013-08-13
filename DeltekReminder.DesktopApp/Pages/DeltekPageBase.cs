@@ -7,7 +7,7 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public abstract class DeltekPageBase
     {
-        public abstract bool OnThisPage(DeltekReminderContext settings, Uri uri, bool triggeredByIframeRefresh);
+        public abstract bool OnThisPage(DeltekReminderContext settings, Uri uri, WebBrowser browser, bool triggeredByIframeRefresh);
 
         public void TryGetTimesheet(DeltekReminderContext settings, WebBrowser browser)
         {

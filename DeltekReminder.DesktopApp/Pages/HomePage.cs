@@ -23,9 +23,15 @@ namespace DeltekReminder.DesktopApp.Pages
             if (handler != null) handler(this, args);
         }
 
-        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, bool triggeredByIframeRefresh)
+        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser, bool triggeredByIframeRefresh)
         {
-            return UrlUtils.OnTimeCollectionPage(uri) && !triggeredByIframeRefresh;
+            if (!UrlUtils.OnTimeCollectionPage(uri)) return false;
+
+            HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
+            if (unitFrameDocument == null) return false;
+
+            var myTimesheetsOnPage = unitFrameDocument.body.innerText.Contains("MyTimesheets");
+            return myTimesheetsOnPage;
         }
 
         public override void TryGetTimesheetInternal(DeltekReminderContext ctx, WebBrowser browser)
