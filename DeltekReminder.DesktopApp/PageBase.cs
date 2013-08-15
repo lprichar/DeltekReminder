@@ -31,6 +31,7 @@ namespace DeltekReminder.DesktopApp
         protected void SetTrayAlert(string message)
         {
             var parent = GetMainWindow();
+            if (parent == null) return;
             parent.SetTrayAlert(message);
         }
 
