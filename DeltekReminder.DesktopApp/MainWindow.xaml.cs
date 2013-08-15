@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using DeltekReminder.Lib;
 using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.Win32;
 
@@ -19,6 +19,7 @@ namespace DeltekReminder.DesktopApp
     {
         private readonly DeltekReminderUiContext _ctx;
         private FrameworkElement _loadingAnimation;
+        private TaskbarIcon _taskbarIcon;
 
         public MainWindow()
         {
@@ -75,18 +76,32 @@ namespace DeltekReminder.DesktopApp
             }
         }
 
-        public void SetTrayAlert(string message)
+        public void ShowTimePicker(Timesheet timesheet)
         {
-            TaskbarIcon taskbarIcon = GetElementByName<TaskbarIcon>("TaskbarIcon");
-            if (taskbarIcon.SupportsCustomToolTips)
+            if (TaskbarIcon.SupportsCustomToolTips)
             {
-                var baloon = new GenericBaloon {Message = message};
-                baloon.OpenTimesheet += (sender, e) => OpenTimesheet(taskbarIcon);
-                taskbarIcon.ShowCustomBalloon(baloon, PopupAnimation.Fade, null);
+                var baloon = new TimePickerBaloon(timesheet);
+                baloon.OpenTimesheet += (sender, e) => OpenTimesheet(TaskbarIcon);
+                baloon.SetHoursForToday += (sender, args) => _ctx.NavigationHelper.ShowStatusPage(NavigationService, args); ;
+                TaskbarIcon.ShowCustomBalloon(baloon, PopupAnimation.Fade, null);
             }
             else
             {
-                taskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
+                TaskbarIcon.ShowBalloonTip("Deltek Reminder", "Your timesheet is missing", BalloonIcon.Error);
+            }
+        }
+        
+        public void SetTrayAlert(string message)
+        {
+            if (TaskbarIcon.SupportsCustomToolTips)
+            {
+                var baloon = new GenericBaloon {Message = message};
+                baloon.OpenTimesheet += (sender, e) => OpenTimesheet(TaskbarIcon);
+                TaskbarIcon.ShowCustomBalloon(baloon, PopupAnimation.Fade, null);
+            }
+            else
+            {
+                TaskbarIcon.ShowBalloonTip("Deltek Reminder", message, BalloonIcon.Error);
             }
         }
 
@@ -106,6 +121,11 @@ namespace DeltekReminder.DesktopApp
             SetVisible(statusTextElement, showStatus);
             if (statusText != null)
                 statusTextElement.Text = statusText;
+        }
+
+        private TaskbarIcon TaskbarIcon
+        {
+            get { return _taskbarIcon ?? (_taskbarIcon = GetElementByName<TaskbarIcon>("TaskbarIcon")); }
         }
 
         private FrameworkElement LoadingAnimation

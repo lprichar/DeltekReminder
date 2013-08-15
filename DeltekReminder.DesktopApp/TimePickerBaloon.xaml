@@ -20,17 +20,18 @@
             <Setter Property="TextDecorations" Value="" />
         </Style>
     </UserControl.Resources>
-    
+
     <Border CornerRadius="4" BorderBrush="#555555" BorderThickness="0" Background="#FF0091BE" Width="275" Height="75">
         <Grid>
-            <TextBlock Foreground="White" TextAlignment="Center" Margin="5">Pick Your Hours</TextBlock>
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0" Orientation="Horizontal">
-                <TextBlock Style="{StaticResource HourText}" FontSize="15" ><Hyperlink>7.0</Hyperlink></TextBlock>
-                <TextBlock Style="{StaticResource HourText}" FontSize="20" ><Hyperlink>7.5</Hyperlink></TextBlock>
-                <TextBlock Style="{StaticResource HourText}" FontSize="50"><Hyperlink>8</Hyperlink></TextBlock>
-                <TextBlock Style="{StaticResource HourText}" FontSize="20"><Hyperlink>8.5</Hyperlink></TextBlock>
-                <TextBlock Style="{StaticResource HourText}" FontSize="15"><Hyperlink>9.0</Hyperlink></TextBlock>
+            <TextBlock Foreground="White" TextAlignment="Center" Margin="5" x:Name="ProjectName">Project Name</TextBlock>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock Style="{StaticResource HourText}" FontSize="15"><Hyperlink Click="Hours_OnClick">7.0</Hyperlink></TextBlock>
+                <TextBlock Style="{StaticResource HourText}" FontSize="20"><Hyperlink Click="Hours_OnClick">7.5</Hyperlink></TextBlock>
+                <TextBlock Style="{StaticResource HourText}" FontSize="45"><Hyperlink Click="Hours_OnClick">8</Hyperlink></TextBlock>
+                <TextBlock Style="{StaticResource HourText}" FontSize="20"><Hyperlink Click="Hours_OnClick">8.5</Hyperlink></TextBlock>
+                <TextBlock Style="{StaticResource HourText}" FontSize="15"><Hyperlink Click="Hours_OnClick">9.0</Hyperlink></TextBlock>
             </StackPanel>
+            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"><Hyperlink FontSize="10" Foreground="White" Click="OpenTimesheet_Click">Open Timesheet</Hyperlink></TextBlock>
         </Grid>
     </Border>
 </UserControl>

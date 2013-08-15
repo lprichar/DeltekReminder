@@ -7,7 +7,7 @@ namespace DeltekReminder.DesktopApp.Pages
 {
     public abstract class DeltekPageBase
     {
-        public abstract bool OnThisPage(DeltekReminderContext settings, Uri uri, WebBrowser browser);
+        public abstract bool OnThisPage(DeltekReminderContext settings, WebBrowser browser);
 
         public void TryGetTimesheet(DeltekReminderContext settings, WebBrowser browser)
         {
@@ -55,6 +55,13 @@ namespace DeltekReminder.DesktopApp.Pages
             if (unitFrame == null) return null;
             HTMLDocument unitFrameDocument = (HTMLDocument)unitFrame.document;
             return unitFrameDocument;
+        }
+
+        protected Uri GetUri(WebBrowser browser)
+        {
+            var document = (HTMLDocument)browser.Document;
+            var uri = new Uri(document.url);
+            return uri;
         }
     }
 }

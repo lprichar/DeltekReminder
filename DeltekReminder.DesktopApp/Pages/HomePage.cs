@@ -23,8 +23,9 @@ namespace DeltekReminder.DesktopApp.Pages
             if (handler != null) handler(this, args);
         }
 
-        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser)
+        public override bool OnThisPage(DeltekReminderContext ctx, WebBrowser browser)
         {
+            var uri = GetUri(browser);
             if (!UrlUtils.OnTimeCollectionPage(uri)) return false;
 
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);

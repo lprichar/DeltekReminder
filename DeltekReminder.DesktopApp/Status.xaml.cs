@@ -184,7 +184,7 @@ namespace DeltekReminder.DesktopApp
             var shouldShowAlert = _ctx.SchedulerService.ShouldShowAlert(_ctx, args.Timesheet);
             if (shouldShowAlert)
             {
-                SetTrayAlert("Missing timesheet for today!");
+                ShowTimePicker(args.Timesheet);
             }
             else
             {
@@ -206,16 +206,15 @@ namespace DeltekReminder.DesktopApp
         private void OnNavigatedToNewPage()
         {
             var document = (HTMLDocument)Browser.Document;
-            var uri = new Uri(document.url);
 
-            var navigationError = uri.ToString().StartsWith("res://ieframe.dll");
+            var navigationError = document.url.StartsWith("res://ieframe.dll");
             if (navigationError)
             {
                 BrowserTimedOut();
                 return;
             }
 
-            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, uri, Browser));
+            var currentPage = _pages.FirstOrDefault(i => i.OnThisPage(_ctx, Browser));
             if (currentPage != null)
             {
                 if (currentPage is HomePage)
@@ -261,6 +260,20 @@ namespace DeltekReminder.DesktopApp
         private void NextCheckTime_Click(object sender, RoutedEventArgs e)
         {
             _statusViewModel.SetNextCheckTimeEditable(true);
+        }
+
+        public void SetHoursForToday(SetHoursForTodayArgs setHoursForTodayArgs)
+        {
+            var timesheetPage = new TimesheetPage();
+            if (timesheetPage.OnThisPage(_ctx, Browser))
+            {
+                timesheetPage.SetHoursForToday(_ctx, Browser, setHoursForTodayArgs.Hours);
+            }
+            else
+            {
+                // todo: pass in SetHoursForToday as a param for what to do when you find a timesheet
+                Login();
+            }
         }
     }
 }

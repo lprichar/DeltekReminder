@@ -8,13 +8,19 @@ namespace DeltekReminder.DesktopApp
     {
         public void ShowStatusPage(NavigationService navigationService, bool showBrowser)
         {
+            var statusPage = ShowStatusPage(navigationService);
+            statusPage.ShowBrowser(showBrowser);
+        }
+
+        private static Status ShowStatusPage(NavigationService navigationService)
+        {
             var statusPage = navigationService.Content as Status;
             if (statusPage == null)
             {
                 statusPage = new Status();
                 navigationService.Navigate(statusPage);
             }
-            statusPage.ShowBrowser(showBrowser);
+            return statusPage;
         }
 
         public void ShowCredentialsPage(NavigationService navigationService, string message = null)
@@ -25,6 +31,12 @@ namespace DeltekReminder.DesktopApp
                 currentPage = new Credentials(message);
                 navigationService.Navigate(currentPage);
             }
+        }
+
+        public void ShowStatusPage(NavigationService navigationService, SetHoursForTodayArgs setHoursForTodayArgs)
+        {
+            var statusPage = ShowStatusPage(navigationService);
+            statusPage.SetHoursForToday(setHoursForTodayArgs);
         }
 
         public Version GetVersion()

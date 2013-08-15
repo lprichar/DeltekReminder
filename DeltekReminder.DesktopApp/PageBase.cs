@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using DeltekReminder.Lib;
 
 namespace DeltekReminder.DesktopApp
 {
@@ -35,6 +36,12 @@ namespace DeltekReminder.DesktopApp
             parent.SetTrayAlert(message);
         }
 
+        protected void ShowTimePicker(Timesheet timesheet)
+        {
+            var parent = GetMainWindow();
+            if (parent == null) return;
+            parent.ShowTimePicker(timesheet);
+        }
     }
 
 }

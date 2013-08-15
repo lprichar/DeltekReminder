@@ -8,12 +8,12 @@
 
     <Border CornerRadius="4" BorderBrush="#555555" BorderThickness="0" Background="#FF0091BE" Width="275" Height="75">
         <Grid>
-            <Image HorizontalAlignment="Left" Width="30" Margin="20" Source="WhiteIcon.png" />
+            <Image HorizontalAlignment="Left" Width="30" Margin="15" Source="WhiteIcon.png" />
             <TextBlock x:Name="MessageText" Margin="60,0,0,0" VerticalAlignment="Center" FontSize="14" TextAlignment="Left" Foreground="White" Text="Missing timesheet for today" />
-            <Button Width="20" Height="20" Margin="10" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Close_Click">
+            <Button Width="20" Height="20" Margin="5" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Close_Click">
                 <Image Source="Images/navigate_cross.png" Stretch="Fill" />
             </Button>
-            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"><Hyperlink FontSize="10" Foreground="White" Click="OpenTimesheet_Click">Open Timesheet</Hyperlink></TextBlock>
+            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"><Hyperlink FontSize="10" Foreground="White" Click="OpenTimesheet_Click">Open Timesheet</Hyperlink></TextBlock>
         </Grid>
     </Border>
 </UserControl>

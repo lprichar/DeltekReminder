@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using DeltekReminder.Lib;
@@ -17,8 +17,9 @@ namespace DeltekReminder.DesktopApp.Pages
             if (handler != null) handler(this, new FoundTimesheetArgs { Timesheet = timesheet });
         }
 
-        public override bool OnThisPage(DeltekReminderContext ctx, Uri uri, WebBrowser browser)
+        public override bool OnThisPage(DeltekReminderContext ctx, WebBrowser browser)
         {
+            var uri = GetUri(browser);
             if (!UrlUtils.OnTimeCollectionPage(uri)) return false;
 
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
@@ -34,15 +35,27 @@ namespace DeltekReminder.DesktopApp.Pages
             var projectNumberCell = document.getElementById(id);
             return projectNumberCell.innerText;
         }
-        
-        public double? GetHoursAtCell(HTMLDocument document, int row, int column)
+
+        public void SetHoursAtCell(HTMLDocument document, int row, int column, decimal val)
         {
-            var id = string.Format("hrs{0}_{1}", row, column);
-            var hoursCell = document.getElementById(id);
+            var hoursCell = GetHoursCell(document, row, column);
+            hoursCell.innerText = val.ToString(CultureInfo.InvariantCulture);
+        }
+        
+        public decimal? GetHoursAtCell(HTMLDocument document, int row, int column)
+        {
+            var hoursCell = GetHoursCell(document, row, column);
             if (hoursCell == null) return null;
             var text = hoursCell.innerText;
             if (string.IsNullOrEmpty(text)) return null;
-            return double.Parse(text);
+            return decimal.Parse(text);
+        }
+
+        private static IHTMLElement GetHoursCell(HTMLDocument document, int row, int column)
+        {
+            var id = string.Format("hrs{0}_{1}", row, column);
+            var hoursCell = document.getElementById(id);
+            return hoursCell;
         }
 
         public override void TryGetTimesheetInternal(DeltekReminderContext ctx, WebBrowser browser)
@@ -57,14 +70,14 @@ namespace DeltekReminder.DesktopApp.Pages
             Timesheet timesheet = new Timesheet();
 
             PopulateTimesheetAttributes(unitFrameDocument, timesheet);
-            PopulateDays(unitFrameDocument, timesheet);
+            PopulateDays(timesheet);
             PopulateProjects(unitFrameDocument, timesheet);
             PopulateEntries(unitFrameDocument, timesheet);
 
             return timesheet;
         }
 
-        private void PopulateDays(HTMLDocument document, Timesheet timesheet)
+        private void PopulateDays(Timesheet timesheet)
         {
             for (var column = 0; column < timesheet.DaysInPeriod; column++)
             {
@@ -132,6 +145,17 @@ namespace DeltekReminder.DesktopApp.Pages
                 timesheet.Projects.Add(project);
                 row++;
             }
+        }
+
+        public void SetHoursForToday(DeltekReminderContext ctx, WebBrowser browser, decimal hours)
+        {
+            HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
+            var timesheet = GetTimesheetFromDocument(unitFrameDocument);
+            var projectToSet = timesheet.GetProjectWithMostHours();
+            var todayDay = timesheet.GetTodayDay(ctx);
+            SetHoursAtCell(unitFrameDocument, projectToSet.Row, todayDay.Column, hours);
+
+            // todo: Save()
         }
     }
 

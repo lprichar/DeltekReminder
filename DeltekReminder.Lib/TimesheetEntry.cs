@@ -8,7 +8,7 @@ namespace DeltekReminder.Lib
         
         public DateTime Date { get; set; }
         
-        public double Hours { get; set; }
+        public decimal Hours { get; set; }
 
         public int Column { get; set; }
     }
