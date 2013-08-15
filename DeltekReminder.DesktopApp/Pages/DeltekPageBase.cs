@@ -31,22 +31,26 @@ namespace DeltekReminder.DesktopApp.Pages
             if (handler != null) handler(this, new OnErrorArgs { Exception = ex });
         }
 
-        public static IHTMLWindow2 GetUnitFrameGlobal(WebBrowser browser)
+        protected static IHTMLWindow2 GetFrame(WebBrowser browser, string frameName)
         {
             var document = browser.Document as HTMLDocument;
             if (document == null) throw new Exception("Unable to find unitFrame iframe, document was null");
-            if (document.frames.length == 0) return null;
-            var unitFrame = document.frames.item(1) as IHTMLWindow2;
-            if (unitFrame == null || unitFrame.name != "unitFrame")
+            return GetFrame(document, frameName);
+        }
+
+        protected static IHTMLWindow2 GetFrame(HTMLDocument document, string frameName)
+        {
+            for (int i = 0; i < document.frames.length; i++)
             {
-                throw new Exception("Unable to find unitFrame iframe");
+                var frame = (IHTMLWindow2)document.frames.item(i);
+                if (frame.name == frameName) return frame;
             }
-            return unitFrame;
+            throw new Exception("Unable to find " + frameName + " iframe");
         }
 
         public IHTMLWindow2 GetUnitFrame(WebBrowser browser)
         {
-            return GetUnitFrameGlobal(browser);
+            return GetFrame(browser, "unitFrame");
         }
 
         public HTMLDocument GetUnitFrameDocument(WebBrowser browser)

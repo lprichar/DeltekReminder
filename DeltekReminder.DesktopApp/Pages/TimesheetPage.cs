@@ -1,8 +1,11 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using DeltekReminder.Lib;
 using DeltekReminder.Lib.Utils;
+using log4net;
 using mshtml;
 
 namespace DeltekReminder.DesktopApp.Pages
@@ -10,6 +13,7 @@ namespace DeltekReminder.DesktopApp.Pages
     public class TimesheetPage : DeltekPageBase
     {
         public event FoundTimesheet FoundTimesheet;
+        private static readonly ILog _log = MyLogManager.GetLogger(typeof(TimesheetPage));
 
         protected virtual void InvokeFoundTimesheet(Timesheet timesheet)
         {
@@ -42,6 +46,7 @@ namespace DeltekReminder.DesktopApp.Pages
             hoursCell.click();
             var textBox = (HTMLInputElement)hoursCell.children[0];
             textBox.value = val.ToString(CultureInfo.InvariantCulture);
+            hoursCell.click(); // this second click fires JavaScript to save the value
         }
         
         public decimal? GetHoursAtCell(HTMLDocument document, int row, int column)
@@ -156,8 +161,73 @@ namespace DeltekReminder.DesktopApp.Pages
             var projectToSet = timesheet.GetProjectWithMostHours();
             var todayDay = timesheet.GetTodayDay(ctx);
             SetHoursAtCell(unitFrameDocument, projectToSet.Row, todayDay.Column, hours);
+            SaveTimesheet(unitFrameDocument);
+        }
 
-            // todo: Save()
+        private async void SaveTimesheet(HTMLDocument document)
+        {
+            var saveText = document.getElementById("appOptionsDivsaveTS");
+            saveText.click();
+
+            var modalDocument = await GetModalFrameDocument(document);
+
+            bool warningExisted = ClickContinueForAnyWarningButtons(modalDocument);
+            if (warningExisted)
+            {
+                modalDocument = await GetModalFrameDocument(document);
+            }
+            ClickOkToConfirmSaveHappened(modalDocument);
+        }
+
+        private static async Task<HTMLDocument> GetModalFrameDocument(HTMLDocument document)
+        {
+            await Task.Delay(500); // give it time to save
+            var modalFrame = GetFrame(document, "modalFrame");
+            var modalDocument = (HTMLDocument) modalFrame.document;
+            return modalDocument;
+        }
+
+        private static void ClickOkToConfirmSaveHappened(HTMLDocument modalDocument)
+        {
+            var okButton = GetInputByValue(modalDocument, "OK");
+            
+            if (okButton != null)
+            {
+                okButton.click(); // just to be polite, not strictly necessary
+            }
+            else
+            {
+                _log.Warn("There was no OK button to click, save may not have succeeded.");
+            }
+        }
+
+        private static bool ClickContinueForAnyWarningButtons(HTMLDocument modalDocument)
+        {
+            var warningButton = GetInputByValue(modalDocument, "Continue");
+
+            if (warningButton != null)
+            {
+                _log.Debug("There was a warning. We clicked continue to ignore it. You're welcome.");
+                warningButton.click();
+                return true;
+            }
+            return false;
+        }
+
+        private static HTMLInputElement GetInputByValue(HTMLDocument modalDocument, string value)
+        {
+            var allButtons = modalDocument
+                .getElementsByTagName("input")
+                .Cast<HTMLInputElement>()
+                .Where(i => i.type == "button")
+                .ToArray();
+            
+            var matchingButton = allButtons.FirstOrDefault(i => value.Equals(i.value.Trim(), StringComparison.InvariantCultureIgnoreCase));
+            if (matchingButton != null) return matchingButton;
+            var existingButtons = string.Join(", ", allButtons.Select(i => i.value));
+            var message = "Couldn't find button " + value + " could only find buttons: " + existingButtons;
+            _log.Debug(message);
+            return null;
         }
     }
 
