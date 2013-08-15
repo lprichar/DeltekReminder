@@ -20,7 +20,7 @@ Installation
 Release Notes
 ==============
 
-1.0.0.12 - Aug 12, 2013
+1.0.0.12 - Aug 15, 2013
 -------------
 
 * Feature: Upon reminder popup can now quick save time against the project with the most hours
