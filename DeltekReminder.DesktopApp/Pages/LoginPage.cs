@@ -45,7 +45,7 @@ namespace DeltekReminder.DesktopApp.Pages
             IHTMLElement loginButton = document.getElementById("loginButton");
             if (loginButton == null)
             {
-                throw new Exception("Unable to find the loginButton.  Is your URL correct?");
+                throw new WebpageException("Unable to find the loginButton.  Is your URL correct?", document);
             }
             loginButton.click();
         }

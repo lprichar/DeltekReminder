@@ -8,7 +8,7 @@ namespace DeltekReminder.Lib
     {
 
 #if (pretendIts4_59_pm)
-        private readonly DateTime _fakeStartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 2, 16, 59, 58);  // Today at 4:59 PM
+        private readonly DateTime _fakeStartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 2, 16, 59, 57);  // Today at 4:59 PM
         private readonly DateTime _startedApp = DateTime.Now;
 #endif
 

@@ -158,6 +158,7 @@
     <Compile Include="Pages\FailedLoginArgs.cs" />
     <Compile Include="Pages\NoActiveTimesheetArgs.cs" />
     <Compile Include="Pages\SuccessfulLoginArgs.cs" />
+    <Compile Include="Exceptions\WebpageException.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SendErrorReport.xaml.cs">
       <DependentUpon>SendErrorReport.xaml</DependentUpon>

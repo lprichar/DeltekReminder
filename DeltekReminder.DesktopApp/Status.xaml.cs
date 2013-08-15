@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -98,6 +99,12 @@ namespace DeltekReminder.DesktopApp
 
         private void Login()
         {
+            if (IsPerformingAsyncOperation())
+            {
+                _log.Warn("Attempted to log in while already simultaneously checking status.");
+                return;
+            }
+            
             _log.Debug("Attempting to check status");
             
             SetStatus("Logging in...");
@@ -120,7 +127,23 @@ namespace DeltekReminder.DesktopApp
             {
                 page.OnError += OnGetTimesheetError;
             }
-            Browser.Navigate(loginPageUri);
+            NavigateWithRetry(loginPageUri);
+        }
+
+        private void NavigateWithRetry(Uri loginPageUri)
+        {
+            try
+            {
+                Browser.Navigate(loginPageUri);
+            }
+            catch (Exception ex)
+            {
+                var delay = new Random().Next(10, 100);
+                var message = string.Format("Got an error on Navigate, delaying {0} ms and trying again in case this is a deadlock issue.", delay);
+                _log.Warn(message, ex);
+                Thread.Sleep(delay);
+                Browser.Navigate(loginPageUri);
+            }
         }
 
         private void OnGetTimesheetError(object sender, OnErrorArgs args)
