@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using DeltekReminder.Lib;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -20,10 +21,15 @@ namespace DeltekReminder.DesktopApp
             if (handler != null) handler(this, new OpenTimesheetArgs());
         }
 
-        protected virtual void InvokeSetHoursForToday(decimal hours)
+        protected async virtual Task<bool> InvokeSetHoursForToday(decimal hours)
         {
             var handler = SetHoursForToday;
-            if (handler != null) handler(this, new SetHoursForTodayArgs {  Hours = hours});
+            if (handler != null)
+            {
+                var args = new SetHoursForTodayArgs {Hours = hours};
+                return await handler(this, args);
+            }
+            return false;
         }
 
         public TimePickerBaloon(Timesheet timesheet)
@@ -35,10 +41,20 @@ namespace DeltekReminder.DesktopApp
                 ProjectName.Text = projectWithMostHours.ChargeDescription;
         }
 
-        private void Hours_OnClick(object sender, RoutedEventArgs e)
+        private async void Hours_OnClick(object sender, RoutedEventArgs e)
         {
             decimal hours = GetHours(sender);
-            InvokeSetHoursForToday(hours);
+            LoadingAnimation.Visibility = Visibility.Visible;
+            var success = await InvokeSetHoursForToday(hours);
+            LoadingAnimation.Visibility = Visibility.Collapsed;
+            if (success)
+            {
+                Close();
+            }
+            else
+            {
+                ErrorSaving.Visibility = Visibility.Visible;
+            }
         }
 
         private static decimal GetHours(object sender)
@@ -56,12 +72,17 @@ namespace DeltekReminder.DesktopApp
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
+
+        private void Close()
+        {
             TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
             taskbarIcon.CloseBalloon();
         }
     }
 
-    public delegate void SetHoursForToday(object sender, SetHoursForTodayArgs args);
+    public delegate Task<bool> SetHoursForToday(object sender, SetHoursForTodayArgs args);
 
     public class SetHoursForTodayArgs
     {

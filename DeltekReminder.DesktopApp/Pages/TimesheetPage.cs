@@ -154,17 +154,17 @@ namespace DeltekReminder.DesktopApp.Pages
             }
         }
 
-        public void SetHoursForToday(DeltekReminderContext ctx, WebBrowser browser, decimal hours)
+        public async Task<bool> SetHoursForToday(DeltekReminderContext ctx, WebBrowser browser, decimal hours)
         {
             HTMLDocument unitFrameDocument = GetUnitFrameDocument(browser);
             var timesheet = GetTimesheetFromDocument(unitFrameDocument);
             var projectToSet = timesheet.GetProjectWithMostHours();
             var todayDay = timesheet.GetTodayDay(ctx);
             SetHoursAtCell(unitFrameDocument, projectToSet.Row, todayDay.Column, hours);
-            SaveTimesheet(unitFrameDocument);
+            return await SaveTimesheet(unitFrameDocument);
         }
 
-        private async void SaveTimesheet(HTMLDocument document)
+        private async Task<bool> SaveTimesheet(HTMLDocument document)
         {
             var saveText = document.getElementById("appOptionsDivsaveTS");
             saveText.click();
@@ -176,7 +176,7 @@ namespace DeltekReminder.DesktopApp.Pages
             {
                 modalDocument = await GetModalFrameDocument(document);
             }
-            ClickOkToConfirmSaveHappened(modalDocument);
+            return ClickOkToConfirmSaveHappened(modalDocument);
         }
 
         private static async Task<HTMLDocument> GetModalFrameDocument(HTMLDocument document)
@@ -187,18 +187,18 @@ namespace DeltekReminder.DesktopApp.Pages
             return modalDocument;
         }
 
-        private static void ClickOkToConfirmSaveHappened(HTMLDocument modalDocument)
+        private static bool ClickOkToConfirmSaveHappened(HTMLDocument modalDocument)
         {
             var okButton = GetInputByValue(modalDocument, "OK");
             
             if (okButton != null)
             {
                 okButton.click(); // just to be polite, not strictly necessary
+                return true;
             }
-            else
-            {
-                _log.Warn("There was no OK button to click, save may not have succeeded.");
-            }
+            
+            _log.Warn("There was no OK button to click, save may have failed.");
+            return false;
         }
 
         private static bool ClickContinueForAnyWarningButtons(HTMLDocument modalDocument)

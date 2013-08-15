@@ -82,7 +82,7 @@ namespace DeltekReminder.DesktopApp
             {
                 var baloon = new TimePickerBaloon(timesheet);
                 baloon.OpenTimesheet += (sender, e) => OpenTimesheet(TaskbarIcon);
-                baloon.SetHoursForToday += (sender, args) => _ctx.NavigationHelper.ShowStatusPage(NavigationService, args); ;
+                baloon.SetHoursForToday += async (sender, args) => await _ctx.NavigationHelper.ShowStatusPage(NavigationService, args); ;
                 TaskbarIcon.ShowCustomBalloon(baloon, PopupAnimation.Fade, null);
             }
             else

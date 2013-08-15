@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Navigation;
 
 namespace DeltekReminder.DesktopApp
@@ -33,10 +34,10 @@ namespace DeltekReminder.DesktopApp
             }
         }
 
-        public void ShowStatusPage(NavigationService navigationService, SetHoursForTodayArgs setHoursForTodayArgs)
+        public async Task<bool> ShowStatusPage(NavigationService navigationService, SetHoursForTodayArgs setHoursForTodayArgs)
         {
             var statusPage = ShowStatusPage(navigationService);
-            statusPage.SetHoursForToday(setHoursForTodayArgs);
+            return await statusPage.SetHoursForToday(setHoursForTodayArgs);
         }
 
         public Version GetVersion()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -262,18 +263,17 @@ namespace DeltekReminder.DesktopApp
             _statusViewModel.SetNextCheckTimeEditable(true);
         }
 
-        public void SetHoursForToday(SetHoursForTodayArgs setHoursForTodayArgs)
+        public async Task<bool> SetHoursForToday(SetHoursForTodayArgs setHoursForTodayArgs)
         {
             var timesheetPage = new TimesheetPage();
             if (timesheetPage.OnThisPage(_ctx, Browser))
             {
-                timesheetPage.SetHoursForToday(_ctx, Browser, setHoursForTodayArgs.Hours);
+                return await timesheetPage.SetHoursForToday(_ctx, Browser, setHoursForTodayArgs.Hours);
             }
-            else
-            {
-                // todo: pass in SetHoursForToday as a param for what to do when you find a timesheet
-                Login();
-            }
+            
+            // todo: pass in SetHoursForToday as a param for what to do when you find a timesheet
+            Login();
+            return false;
         }
     }
 }
