@@ -39,7 +39,9 @@ namespace DeltekReminder.DesktopApp.Pages
         public void SetHoursAtCell(HTMLDocument document, int row, int column, decimal val)
         {
             var hoursCell = GetHoursCell(document, row, column);
-            hoursCell.innerText = val.ToString(CultureInfo.InvariantCulture);
+            hoursCell.click();
+            var textBox = (HTMLInputElement)hoursCell.children[0];
+            textBox.value = val.ToString(CultureInfo.InvariantCulture);
         }
         
         public decimal? GetHoursAtCell(HTMLDocument document, int row, int column)
