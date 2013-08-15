@@ -22,6 +22,7 @@ Release Notes
 1.0.0.12 - Aug 12, 2013
 -------------
 
+* Feature: Upon reminder popup can now quick save time against the project with the most hours
 * Fixed: Null reference exception when setting the tray icon and the main form isn't initialized yet
 * Fixed: If you navigated to a different page (e.g. expenses) the app was getting a null 
 reference exception (b/c it incorrectly thought it was on the home page)
