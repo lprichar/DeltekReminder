@@ -42,7 +42,7 @@ namespace DeltekReminder.DesktopApp
 
         private async void Send_Click(object sender, RoutedEventArgs e)
         {
-            var client = new HttpClient();
+            var client = new HttpClient {Timeout = new TimeSpan(0, 0, minutes: 1, seconds: 0)};
             const string url = SOS_URL + "/ApiV1/DeltekReminderError";
             LoadingAnimation.Visibility = Visibility.Visible;
             await client.PostAsync(url, GetJsonAsHttpContent(_jsonToSend));
