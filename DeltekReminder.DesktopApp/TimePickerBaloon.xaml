@@ -23,7 +23,10 @@
 
     <Border CornerRadius="4" BorderBrush="#555555" BorderThickness="0" Background="#FF0091BE" Width="275" Height="75">
         <Grid>
-            <TextBlock Foreground="White" TextAlignment="Center" Margin="5" x:Name="ProjectName">Project Name</TextBlock>
+            <TextBlock Foreground="White" VerticalAlignment="Top" TextAlignment="Center" Margin="5" x:Name="ProjectName">Project Name</TextBlock>
+            <Button Width="20" Height="20" Margin="5" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Close_Click">
+                <Image Source="Images/navigate_cross.png" Stretch="Fill" />
+            </Button>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" Orientation="Horizontal">
                 <TextBlock Style="{StaticResource HourText}" FontSize="15"><Hyperlink Click="Hours_OnClick">7.0</Hyperlink></TextBlock>
                 <TextBlock Style="{StaticResource HourText}" FontSize="20"><Hyperlink Click="Hours_OnClick">7.5</Hyperlink></TextBlock>

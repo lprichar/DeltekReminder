@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Documents;
 using DeltekReminder.Lib;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace DeltekReminder.DesktopApp
 {
@@ -51,6 +52,12 @@ namespace DeltekReminder.DesktopApp
         private void OpenTimesheet_Click(object sender, RoutedEventArgs e)
         {
             InvokeOpenTimesheet();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
+            taskbarIcon.CloseBalloon();
         }
     }
 
