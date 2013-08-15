@@ -6,6 +6,7 @@ Reminds you to fill in your timesheet daily
 Features:
 -------------
 
+* One click entry of hours
 * One click to open active timesheet (no logging in)
 * Configurable reminder time
 * Close reminder to sleep 15 minutes
