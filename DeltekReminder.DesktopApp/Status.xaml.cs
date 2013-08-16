@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using DeltekReminder.DesktopApp.Pages;
 using DeltekReminder.Lib;
+using DeltekReminder.Lib.Utils;
 using log4net;
 using mshtml;
 
@@ -185,14 +186,22 @@ namespace DeltekReminder.DesktopApp
             var shouldShowAlert = _ctx.SchedulerService.ShouldShowAlert(_ctx, args.Timesheet);
             if (shouldShowAlert)
             {
-                var timesheetStartsBeforeToday = args.Timesheet.Days[0].Date < _ctx.Now;
-                if (timesheetStartsBeforeToday)
+                var timesheetStartsAfterToday = args.Timesheet.Days[0].Date > _ctx.Now;
+                if (timesheetStartsAfterToday)
                 {
-                    ShowTimePicker(args.Timesheet);
+                    SetTrayAlert("No active timesheet");
                 }
                 else
                 {
-                    SetTrayAlert("No active timesheet");
+                    var thisIsTheLastDayOfTheTimePeriod = args.Timesheet.Days.Last().Date.SameDay(_ctx.Now);
+                    if (thisIsTheLastDayOfTheTimePeriod)
+                    {
+                        SetTrayAlert("Sign your timesheet");
+                    }
+                    else
+                    {
+                        ShowTimePicker(args.Timesheet);
+                    }
                 }
             }
             else

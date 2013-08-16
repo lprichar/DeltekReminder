@@ -7,8 +7,9 @@ Features:
 -------------
 
 * One click entry of hours
-* One click to open active timesheet (no logging in)
+* Reminds you to sign timesheet at end of period
 * Configurable reminder time
+* One click to open active timesheet (no logging in)
 * Close reminder to sleep 15 minutes
 * No reminder if you're already entered time
 
@@ -20,8 +21,9 @@ Installation
 Release Notes
 ==============
 
-1.0.0.13
+1.0.0.13 - Aug 16, 2013
 -------------
+* Feature: If this is the last day of the time period the app prompts you to sign your timesheet
 * Fixed: If the time period just ended and you had an open timesheet way in the future then the app was asking you 
 to enter time. Now it correctly tells you that there is no active timesheet.
 
