@@ -185,7 +185,15 @@ namespace DeltekReminder.DesktopApp
             var shouldShowAlert = _ctx.SchedulerService.ShouldShowAlert(_ctx, args.Timesheet);
             if (shouldShowAlert)
             {
-                ShowTimePicker(args.Timesheet);
+                var timesheetStartsBeforeToday = args.Timesheet.Days[0].Date < _ctx.Now;
+                if (timesheetStartsBeforeToday)
+                {
+                    ShowTimePicker(args.Timesheet);
+                }
+                else
+                {
+                    SetTrayAlert("No active timesheet");
+                }
             }
             else
             {

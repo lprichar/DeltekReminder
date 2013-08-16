@@ -20,6 +20,11 @@ Installation
 Release Notes
 ==============
 
+1.0.0.13
+-------------
+* Fixed: If the time period just ended and you had an open timesheet way in the future then the app was asking you 
+to enter time. Now it correctly tells you that there is no active timesheet.
+
 1.0.0.12 - Aug 15, 2013
 -------------
 
