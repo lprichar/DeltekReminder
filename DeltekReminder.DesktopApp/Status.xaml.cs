@@ -172,6 +172,8 @@ namespace DeltekReminder.DesktopApp
 
         private void LoginPageFailedLogin(object sender, FailedLoginArgs args)
         {
+            if (!IsPerformingAsyncOperation()) return;
+
             SetStatus(null);
             NavigateToCredentialsPage(_ctx, "Login unsuccessful. Careful you don't get locked out.");
         }

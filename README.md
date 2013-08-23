@@ -21,6 +21,10 @@ Installation
 Release Notes
 ==============
 
+1.0.0.14 - Aug 22, 2013
+-------------
+* Fixed: You can now log out via the web browser and the app won't redirect you to the log in page and tell you your password is incorrect
+
 1.0.0.13 - Aug 16, 2013
 -------------
 * Feature: If this is the last day of the time period the app prompts you to sign your timesheet
