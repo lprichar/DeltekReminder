@@ -24,6 +24,7 @@ Release Notes
 1.0.0.14 - Aug 22, 2013
 -------------
 * Fixed: You can now log out via the web browser and the app won't redirect you to the log in page and tell you your password is incorrect
+* Fixed: The app now silently fails if it can't register itself in startup due to security restrictions
 
 1.0.0.13 - Aug 16, 2013
 -------------

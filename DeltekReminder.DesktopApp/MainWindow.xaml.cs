@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using DeltekReminder.Lib;
 using Hardcodet.Wpf.TaskbarNotification;
+using log4net;
 using Microsoft.Win32;
 
 namespace DeltekReminder.DesktopApp
@@ -20,6 +22,7 @@ namespace DeltekReminder.DesktopApp
         private readonly DeltekReminderUiContext _ctx;
         private FrameworkElement _loadingAnimation;
         private TaskbarIcon _taskbarIcon;
+        private static readonly ILog _log = MyLogManager.GetLogger(typeof(MainWindow));
 
         public MainWindow()
         {
@@ -41,10 +44,17 @@ namespace DeltekReminder.DesktopApp
         {
             if (!System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) return;
 
-            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            try
+            {
+                RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
 
-            string startPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Deltek Reminder\Deltek Reminder.appref-ms";
-            rkApp.SetValue("Deltek Reminder", startPath);
+                string startPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Deltek Reminder\Deltek Reminder.appref-ms";
+                rkApp.SetValue("Deltek Reminder", startPath);
+            }
+            catch (TargetInvocationException ex)
+            {
+                _log.Error("Unable to register deltek reminder to startup", ex);
+            }
         }
 
         protected override void OnRender(System.Windows.Media.DrawingContext drawingContext)
