@@ -22,6 +22,7 @@ Release Notes
 ==============
 
 1.0.0.15 - Aug 30, 2013
+-------------
 * Fixed: Deltek was popping up "The login page has expired" as modal which was causing "Stop running this script?" modal dialog, so now we log out periodically
 
 1.0.0.14 - Aug 22, 2013
