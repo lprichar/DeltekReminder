@@ -21,6 +21,8 @@ namespace DeltekReminder.DesktopApp
         private readonly DeltekReminderUiContext _ctx;
         private readonly StatusViewModel _statusViewModel;
         private static readonly ILog _log = MyLogManager.GetLogger(typeof(Status));
+        readonly Timer _sessionExpirationTimer;
+        private const int MINUTES_UNTIL_SESSION_TIMEOUT = 9; // Deltek eventually times out and gives "The login page has expired. Please click OK to reload the page.", so preempt it by logging out
 
         public Status()
         {
@@ -28,10 +30,22 @@ namespace DeltekReminder.DesktopApp
             Browser.LoadCompleted += Browser_LoadCompleted;
 
             _ctx = DeltekReminderUiContext.GetInstance();
-            
+
+            _sessionExpirationTimer = new Timer(SessionExpirationTimer_Callback);
             _statusViewModel = new StatusViewModel(_ctx);
             _statusViewModel.CheckTimeChanged += StatusViewModelOnCheckTimeChanged;
             DataContext = _statusViewModel;
+        }
+
+        private void SessionExpirationTimer_Callback(object state)
+        {
+            Dispatcher.BeginInvoke(new Action(LogOut), DispatcherPriority.Normal, null);
+        }
+
+        private void LogOut()
+        {
+            Uri loginPage = UrlUtils.GetLoginPage(_ctx.Settings.BaseUrl);
+            Browser.Navigate(loginPage);
         }
 
         private void BrowserTimedOut()
@@ -146,6 +160,13 @@ namespace DeltekReminder.DesktopApp
                 Thread.Sleep(delay);
                 Browser.Navigate(loginPageUri);
             }
+            ResetSessionExpirationTimer();
+        }
+
+        private void ResetSessionExpirationTimer()
+        {
+            var neverAutoRenewTimer = new TimeSpan(0, 0, 0, 0, -1);
+            _sessionExpirationTimer.Change(new TimeSpan(0, 0, MINUTES_UNTIL_SESSION_TIMEOUT, 0), neverAutoRenewTimer);
         }
 
         private void OnGetTimesheetError(object sender, OnErrorArgs args)
@@ -225,6 +246,8 @@ namespace DeltekReminder.DesktopApp
 
         private void OnNavigatedToNewPage()
         {
+            if (!IsPerformingAsyncOperation()) return;
+            
             var document = (HTMLDocument)Browser.Document;
 
             var navigationError = document.url.StartsWith("res://ieframe.dll");
