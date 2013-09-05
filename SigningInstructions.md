@@ -13,7 +13,11 @@ http://stackoverflow.com/questions/2815366/cannot-import-the-following-keyfile-b
 
   You should get the dreaded "error MSB3325: Cannot import the following key file: myCert.pfx. The key file may be password protected. To correct this, try to import the certificate again or manually install the certificate to the Strong Name CSP with the following key container name: VS_KEY_B763CB2413AC1708"
 
-3. Import the new SSL Certificate with sn
+3. Optional: If necessary delete the old SSL certificate via
+
+        sn -d VS_KEY_83C9EB0853B733C5
+
+4. Import the new SSL Certificate with sn
 
         sn -i CertumOpenSourceCertToSignWith.pfx VS_KEY_83C9EB0853B733C5
 

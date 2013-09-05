@@ -44,8 +44,15 @@ namespace DeltekReminder.DesktopApp
 
         private void LogOut()
         {
-            Uri loginPage = UrlUtils.GetLoginPage(_ctx.Settings.BaseUrl);
-            Browser.Navigate(loginPage);
+            var document = Browser.Document as HTMLDocument;
+            if (document == null) throw new Exception("Unable to get HTML Document");
+            var image = document.getElementById("logoutMenu");
+            if (image == null)
+            {
+                _log.Debug("Couldn't find the 'logoutMenu' button, unable to log out.");
+                return;
+            }
+            image.click();
         }
 
         private void BrowserTimedOut()
